@@ -5,954 +5,1414 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Varun-SV Blog</title>
   <meta name="description" content="Dynamic blog page powered by GitHub repository content." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="preconnect" href="https://cdn.jsdelivr.net" />
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/atom-one-dark.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/highlight.min.js"></script>
   <style>
+    /* ─── TOKENS ─────────────────────────────────────────────── */
     :root {
-      --bg: #0b1020;
-      --panel: rgba(18, 24, 45, 0.75);
-      --panel-solid: #12182d;
-      --text: #e8ecf3;
-      --muted: #a7b0c0;
-      --primary: #7c9cff;
-      --primary-2: #9f7cff;
-      --border: rgba(255, 255, 255, 0.1);
-      --shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
-      --code-bg: #0f152b;
-      --danger: #ef4444;
-      --max-width: 1200px;
+      --bg:           #0d0f14;
+      --bg-2:         #12151d;
+      --surface:      #181c27;
+      --surface-2:    #1f2435;
+      --border:       rgba(255,255,255,0.07);
+      --border-hover: rgba(232,197,71,0.35);
+      --text:         #f0ece3;
+      --text-2:       #a49f96;
+      --text-3:       #5c5852;
+      --accent:       #e8c547;
+      --accent-2:     #e85d47;
+      --accent-glow:  rgba(232,197,71,0.15);
+      --code-bg:      #0e111a;
+      --shadow-sm:    0 2px 8px rgba(0,0,0,0.4);
+      --shadow-md:    0 8px 32px rgba(0,0,0,0.5);
+      --shadow-lg:    0 24px 60px rgba(0,0,0,0.6);
+      --radius:       16px;
+      --max-w:        1260px;
+      --font-display: 'Playfair Display', Georgia, serif;
+      --font-ui:      'DM Sans', system-ui, sans-serif;
+      --font-mono:    'JetBrains Mono', ui-monospace, monospace;
     }
 
     body.light {
-      --bg: #f5f7fb;
-      --panel: rgba(255, 255, 255, 0.8);
-      --panel-solid: #ffffff;
-      --text: #111827;
-      --muted: #5b6475;
-      --primary: #4f46e5;
-      --primary-2: #7c3aed;
-      --border: rgba(17, 24, 39, 0.08);
-      --shadow: 0 10px 30px rgba(17, 24, 39, 0.08);
-      --code-bg: #f3f4f6;
+      --bg:           #f7f3ec;
+      --bg-2:         #f0ebe0;
+      --surface:      #fffdf8;
+      --surface-2:    #f5f0e6;
+      --border:       rgba(0,0,0,0.08);
+      --border-hover: rgba(180,120,0,0.4);
+      --text:         #1a1612;
+      --text-2:       #6b6259;
+      --text-3:       #b0a89f;
+      --accent:       #c49a10;
+      --accent-2:     #c94030;
+      --accent-glow:  rgba(196,154,16,0.12);
+      --code-bg:      #1a1e2b;
+      --shadow-sm:    0 2px 8px rgba(0,0,0,0.08);
+      --shadow-md:    0 8px 32px rgba(0,0,0,0.1);
+      --shadow-lg:    0 24px 60px rgba(0,0,0,0.12);
     }
 
-    * { box-sizing: border-box; }
+    /* ─── RESET ──────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
+
     body {
-      margin: 0;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-      background:
-        radial-gradient(circle at top left, rgba(124, 156, 255, 0.18), transparent 25%),
-        radial-gradient(circle at top right, rgba(159, 124, 255, 0.16), transparent 20%),
-        var(--bg);
+      font-family: var(--font-ui);
+      font-size: 16px;
+      background-color: var(--bg);
       color: var(--text);
-      transition: background 0.25s ease, color 0.25s ease;
+      line-height: 1.6;
+      min-height: 100vh;
+      transition: background-color 0.3s, color 0.3s;
+      overflow-x: hidden;
     }
 
-    a { color: var(--primary); text-decoration: none; }
+    a { color: var(--accent); text-decoration: none; }
     a:hover { text-decoration: underline; }
 
-    .app {
-      max-width: var(--max-width);
-      margin: 0 auto;
-      padding: 24px;
+    /* ─── READING PROGRESS BAR ───────────────────────────────── */
+    #progressBar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      width: 0%;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      z-index: 200;
+      transition: width 0.1s linear;
+      pointer-events: none;
     }
 
+    /* ─── TOPBAR ─────────────────────────────────────────────── */
     .topbar {
       position: sticky;
       top: 0;
-      z-index: 50;
-      backdrop-filter: blur(14px);
-      background: color-mix(in srgb, var(--bg) 75%, transparent);
+      z-index: 100;
+      background: color-mix(in srgb, var(--bg) 85%, transparent);
+      backdrop-filter: blur(20px) saturate(1.4);
+      -webkit-backdrop-filter: blur(20px) saturate(1.4);
       border-bottom: 1px solid var(--border);
     }
 
     .topbar-inner {
-      max-width: var(--max-width);
+      max-width: var(--max-w);
       margin: 0 auto;
-      padding: 14px 24px;
+      padding: 0 28px;
+      height: 64px;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 16px;
+      gap: 20px;
     }
 
+    /* Brand */
     .brand {
       display: flex;
       align-items: center;
-      gap: 12px;
-      min-width: 0;
-    }
-
-    .brand-badge {
-      width: 40px;
-      height: 40px;
-      display: grid;
-      place-items: center;
-      border-radius: 12px;
-      background: linear-gradient(135deg, var(--primary), var(--primary-2));
-      color: white;
-      font-weight: 800;
-      box-shadow: var(--shadow);
+      gap: 14px;
       flex: 0 0 auto;
     }
 
-    .brand-text h1 {
-      margin: 0;
-      font-size: 1.1rem;
-      line-height: 1.2;
+    .brand-logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      background: var(--accent);
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      box-shadow: 0 0 0 1px rgba(232,197,71,0.3), var(--shadow-sm);
     }
 
-    .brand-text p {
-      margin: 2px 0 0;
-      color: var(--muted);
-      font-size: 0.9rem;
+    .brand-logo svg {
+      width: 22px;
+      height: 22px;
+      fill: #0d0f14;
     }
 
+    .brand-title {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -0.01em;
+    }
+
+    .brand-subtitle {
+      font-size: 0.78rem;
+      color: var(--text-2);
+      margin-top: 3px;
+      font-weight: 300;
+      letter-spacing: 0.02em;
+    }
+
+    /* Toolbar */
     .toolbar {
       display: flex;
       align-items: center;
       gap: 10px;
-      flex-wrap: wrap;
-      justify-content: flex-end;
+      margin-left: auto;
     }
 
-    .input,
-    .button {
+    .search-wrap {
+      position: relative;
+    }
+
+    .search-wrap svg {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 16px;
+      height: 16px;
+      fill: none;
+      stroke: var(--text-3);
+      stroke-width: 2;
+      pointer-events: none;
+    }
+
+    .search-input {
+      font-family: var(--font-ui);
+      font-size: 0.9rem;
+      width: 240px;
+      padding: 9px 12px 9px 36px;
+      background: var(--surface);
       border: 1px solid var(--border);
-      background: var(--panel);
+      border-radius: 10px;
       color: var(--text);
-      border-radius: 12px;
-      padding: 10px 14px;
       outline: none;
-      transition: 0.2s ease;
-      backdrop-filter: blur(12px);
+      transition: 0.2s;
     }
 
-    .input:focus,
-    .button:focus {
-      border-color: color-mix(in srgb, var(--primary) 55%, var(--border));
-      box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary) 15%, transparent);
+    .search-input::placeholder { color: var(--text-3); }
+    .search-input:focus {
+      border-color: color-mix(in srgb, var(--accent) 50%, var(--border));
+      box-shadow: 0 0 0 3px var(--accent-glow);
+      width: 300px;
     }
 
-    .input {
-      min-width: 220px;
+    .kbd-hint {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-family: var(--font-mono);
+      font-size: 0.68rem;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 2px 6px;
+      color: var(--text-3);
+      pointer-events: none;
+      opacity: 1;
+      transition: opacity 0.2s;
     }
 
-    .button {
+    .search-input:focus + .kbd-hint { opacity: 0; }
+
+    .btn {
+      font-family: var(--font-ui);
+      font-size: 0.88rem;
+      font-weight: 500;
       cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      border-radius: 10px;
+      padding: 9px 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      white-space: nowrap;
+      transition: 0.18s;
+    }
+
+    .btn:hover {
+      border-color: var(--border-hover);
+      background: var(--surface-2);
+      transform: translateY(-1px);
+    }
+
+    .btn svg {
+      width: 15px; height: 15px;
+      fill: none; stroke: currentColor; stroke-width: 2;
+      flex: 0 0 auto;
+    }
+
+    .btn-accent {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #0d0f14;
       font-weight: 600;
     }
 
-    .button:hover {
-      transform: translateY(-1px);
-      border-color: color-mix(in srgb, var(--primary) 40%, var(--border));
+    .btn-accent:hover {
+      background: color-mix(in srgb, var(--accent) 85%, white);
+      border-color: color-mix(in srgb, var(--accent) 85%, white);
     }
 
-    .button.primary {
-      background: linear-gradient(135deg, var(--primary), var(--primary-2));
-      color: white;
-      border: none;
-    }
-
+    /* ─── HERO ───────────────────────────────────────────────── */
     .hero {
-      padding: 28px 0 10px;
-      display: grid;
-      gap: 18px;
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 40px 28px 0;
     }
 
     .hero-card {
-      background: var(--panel);
+      background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 24px;
-      padding: 26px;
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(14px);
-      animation: fadeUp 0.5s ease;
+      border-radius: var(--radius);
+      padding: 32px 36px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 24px;
+      align-items: start;
+      position: relative;
+      overflow: hidden;
+      animation: fadeUp 0.5s ease both;
     }
 
-    .hero-card h2 {
-      margin: 0 0 10px;
-      font-size: clamp(1.8rem, 3vw, 2.6rem);
-      line-height: 1.1;
+    .hero-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 0% 0%, rgba(232,197,71,0.06) 0%, transparent 60%);
+      pointer-events: none;
     }
 
-    .hero-card p {
-      margin: 0;
-      color: var(--muted);
-      max-width: 780px;
-      font-size: 1rem;
-    }
-
-    .status-row {
-      margin-top: 18px;
+    .hero-eyebrow {
       display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      align-items: center;
-    }
-
-    .pill {
-      display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 8px 12px;
-      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+
+    .hero-eyebrow-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: pulse 2s infinite;
+    }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(1.9rem, 3vw, 2.8rem);
+      font-weight: 900;
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      margin-bottom: 14px;
+    }
+
+    .hero-title em { font-style: italic; color: var(--accent); }
+
+    .hero-desc {
+      color: var(--text-2);
+      font-size: 0.97rem;
+      font-weight: 300;
+      line-height: 1.7;
+      max-width: 680px;
+    }
+
+    .hero-stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 24px;
+    }
+
+    .stat-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      background: var(--surface-2);
       border: 1px solid var(--border);
-      background: color-mix(in srgb, var(--panel-solid) 80%, transparent);
-      color: var(--muted);
-      font-size: 0.92rem;
+      border-radius: 100px;
+      font-size: 0.83rem;
+      color: var(--text-2);
     }
 
-    .dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 999px;
-      background: var(--primary);
-      box-shadow: 0 0 0 6px color-mix(in srgb, var(--primary) 18%, transparent);
+    .stat-chip-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
     }
 
+    .hero-deco {
+      font-family: var(--font-display);
+      font-size: 7rem;
+      font-weight: 900;
+      font-style: italic;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(232,197,71,0.12);
+      line-height: 1;
+      user-select: none;
+      white-space: nowrap;
+    }
+
+    /* ─── LAYOUT ─────────────────────────────────────────────── */
     .layout {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 28px 28px 40px;
       display: grid;
-      grid-template-columns: 290px 1fr;
-      gap: 22px;
-      margin-top: 22px;
+      grid-template-columns: 300px 1fr;
+      gap: 24px;
+      align-items: start;
     }
 
-    .card {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(14px);
-    }
-
-    .sidebar .card {
+    /* ─── SIDEBAR ────────────────────────────────────────────── */
+    .sidebar-sticky {
       position: sticky;
-      top: 86px;
+      top: 80px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .sidebar-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
       overflow: hidden;
     }
 
-    .sidebar-header {
-      padding: 18px 18px 12px;
+    .sidebar-head {
+      padding: 18px 20px 14px;
       border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
 
-    .sidebar-header h3 {
-      margin: 0;
+    .sidebar-head h3 {
+      font-family: var(--font-display);
       font-size: 1rem;
-    }
-
-    .sidebar-header p {
-      margin: 6px 0 0;
-      color: var(--muted);
-      font-size: 0.92rem;
-    }
-
-    .post-list {
-      max-height: calc(100vh - 180px);
-      overflow: auto;
-      padding: 10px;
-    }
-
-    .post-link {
-      display: block;
-      padding: 14px;
-      border-radius: 14px;
-      color: inherit;
-      text-decoration: none;
-      border: 1px solid transparent;
-      transition: 0.2s ease;
-      animation: fadeUp 0.35s ease both;
-    }
-
-    .post-link:hover,
-    .post-link.active {
-      background: color-mix(in srgb, var(--primary) 10%, transparent);
-      border-color: color-mix(in srgb, var(--primary) 35%, var(--border));
-      text-decoration: none;
-      transform: translateY(-1px);
-    }
-
-    .post-link-title {
-      margin: 0 0 6px;
-      font-size: 0.98rem;
       font-weight: 700;
+    }
+
+    .sidebar-count {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 2px 8px;
+      color: var(--text-3);
+    }
+
+    .post-nav {
+      max-height: calc(100vh - 200px);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      padding: 8px;
+    }
+
+    .post-nav::-webkit-scrollbar { width: 4px; }
+    .post-nav::-webkit-scrollbar-track { background: transparent; }
+    .post-nav::-webkit-scrollbar-thumb { background: var(--surface-2); border-radius: 4px; }
+
+    .post-nav-item {
+      display: block;
+      padding: 14px 14px;
+      border-radius: 10px;
+      border: 1px solid transparent;
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+      transition: 0.18s;
+      animation: fadeUp 0.3s ease both;
+    }
+
+    .post-nav-item:hover {
+      background: color-mix(in srgb, var(--accent) 6%, var(--surface-2));
+      border-color: color-mix(in srgb, var(--accent) 20%, var(--border));
+      text-decoration: none;
+    }
+
+    .post-nav-item.active {
+      background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+      border-color: color-mix(in srgb, var(--accent) 40%, var(--border));
+    }
+
+    .post-nav-item.active .nav-title { color: var(--accent); }
+
+    .nav-title {
+      font-size: 0.9rem;
+      font-weight: 600;
       line-height: 1.35;
+      margin-bottom: 5px;
+      transition: color 0.15s;
     }
 
-    .post-link-meta {
-      color: var(--muted);
-      font-size: 0.84rem;
-      margin-bottom: 6px;
+    .nav-meta {
+      font-family: var(--font-mono);
+      font-size: 0.73rem;
+      color: var(--text-3);
+      margin-bottom: 5px;
     }
 
-    .post-link-desc {
-      color: var(--muted);
-      font-size: 0.88rem;
+    .nav-desc {
+      font-size: 0.82rem;
+      color: var(--text-2);
       display: -webkit-box;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
+      line-height: 1.45;
+      font-weight: 300;
     }
 
-    .content-panel {
-      display: grid;
-      gap: 18px;
-      min-width: 0;
+    .nav-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-top: 7px;
     }
 
-    .notice {
-      padding: 16px 18px;
-      border-radius: 16px;
+    .tag {
+      font-size: 0.72rem;
+      font-weight: 500;
+      padding: 2px 8px;
+      border-radius: 5px;
+      background: var(--surface-2);
       border: 1px solid var(--border);
-      background: var(--panel);
-      color: var(--muted);
+      color: var(--text-3);
+    }
+
+    /* ─── CONTENT AREA ───────────────────────────────────────── */
+    .content-area {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* Notice */
+    .notice {
+      padding: 14px 18px;
+      border-radius: 12px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      font-size: 0.9rem;
+      color: var(--text-2);
     }
 
     .notice.error {
-      border-color: color-mix(in srgb, var(--danger) 40%, var(--border));
-      color: color-mix(in srgb, var(--danger) 70%, var(--text));
+      background: color-mix(in srgb, var(--accent-2) 8%, var(--surface));
+      border-color: color-mix(in srgb, var(--accent-2) 30%, var(--border));
+      color: color-mix(in srgb, var(--accent-2) 80%, var(--text));
     }
 
-    .posts {
-      display: grid;
-      gap: 18px;
-    }
-
-    .post {
-      padding: 24px;
+    /* Posts */
+    .post-article {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
       animation: fadeUp 0.4s ease both;
     }
 
     .post-header {
-      margin-bottom: 18px;
+      padding: 32px 36px 28px;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+    }
+
+    .post-header::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    }
+
+    .post-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+
+    .post-tag {
+      font-size: 0.73rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 6px;
+      background: var(--accent-glow);
+      border: 1px solid color-mix(in srgb, var(--accent) 30%, var(--border));
+      color: var(--accent);
     }
 
     .post-title {
-      margin: 0 0 10px;
-      font-size: clamp(1.45rem, 2vw, 2rem);
-      line-height: 1.15;
+      font-family: var(--font-display);
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -0.025em;
+      margin-bottom: 16px;
     }
 
-    .post-meta {
+    .post-meta-row {
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
-      color: var(--muted);
-      font-size: 0.92rem;
-      margin-bottom: 10px;
+      align-items: center;
+      gap: 14px;
+      color: var(--text-3);
+      font-size: 0.83rem;
+      font-family: var(--font-mono);
     }
 
-    .post-description {
-      color: var(--muted);
-      margin: 0;
+    .post-meta-row .sep { color: var(--border); }
+
+    .post-desc {
+      margin-top: 14px;
+      color: var(--text-2);
       font-size: 1rem;
+      font-weight: 300;
+      line-height: 1.7;
     }
 
+    /* Post body */
+    .post-body {
+      padding: 32px 36px;
+    }
+
+    /* ─── MARKDOWN RENDERING ─────────────────────────────────── */
     .markdown {
-      line-height: 1.75;
+      font-size: 1.03rem;
+      line-height: 1.8;
       word-wrap: break-word;
     }
 
-    .markdown > :first-child { margin-top: 0; }
+    .markdown > *:first-child { margin-top: 0 !important; }
+
     .markdown h1,
     .markdown h2,
     .markdown h3,
-    .markdown h4 {
-      line-height: 1.25;
-      margin-top: 1.6em;
-      margin-bottom: 0.7em;
+    .markdown h4,
+    .markdown h5 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      margin-top: 2em;
+      margin-bottom: 0.6em;
+      scroll-margin-top: 80px;
     }
 
-    .markdown p,
-    .markdown ul,
-    .markdown ol,
-    .markdown blockquote,
-    .markdown pre,
-    .markdown table {
+    .markdown h1 { font-size: 2rem; }
+    .markdown h2 {
+      font-size: 1.5rem;
+      padding-bottom: 0.4em;
+      border-bottom: 1px solid var(--border);
+    }
+    .markdown h3 { font-size: 1.2rem; }
+
+    .markdown p { margin: 1.1em 0; }
+
+    .markdown a {
+      color: var(--accent);
+      border-bottom: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+      padding-bottom: 1px;
+      transition: border-color 0.15s;
+    }
+    .markdown a:hover {
+      border-color: var(--accent);
+      text-decoration: none;
+    }
+
+    .markdown strong { font-weight: 600; color: var(--text); }
+    .markdown em { font-style: italic; }
+
+    .markdown ul, .markdown ol {
+      padding-left: 1.6em;
       margin: 1em 0;
     }
+    .markdown li { margin: 0.35em 0; }
+    .markdown li::marker { color: var(--accent); }
 
     .markdown img {
       max-width: 100%;
-      border-radius: 14px;
+      border-radius: 12px;
       display: block;
-      margin: 1rem auto;
-      box-shadow: var(--shadow);
+      margin: 1.5rem auto;
+      box-shadow: var(--shadow-md);
     }
 
+    .markdown blockquote {
+      margin: 1.5em 0;
+      padding: 1em 1.4em;
+      border-left: 3px solid var(--accent);
+      background: color-mix(in srgb, var(--accent) 5%, var(--surface-2));
+      border-radius: 0 10px 10px 0;
+      color: var(--text-2);
+      font-style: italic;
+    }
+
+    .markdown blockquote p { margin: 0; }
+
+    /* Code blocks */
     .markdown code {
+      font-family: var(--font-mono);
+      font-size: 0.88em;
       background: var(--code-bg);
-      padding: 0.2em 0.45em;
-      border-radius: 8px;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      font-size: 0.92em;
+      padding: 0.18em 0.45em;
+      border-radius: 6px;
+      border: 1px solid var(--border);
     }
 
     .markdown pre {
-      background: var(--code-bg);
+      position: relative;
+      margin: 1.5em 0;
+      border-radius: 12px;
+      overflow: hidden;
       border: 1px solid var(--border);
-      padding: 14px;
-      border-radius: 14px;
-      overflow: auto;
     }
 
     .markdown pre code {
       background: transparent;
       padding: 0;
+      border: none;
+      font-size: 0.9em;
+      display: block;
+      overflow-x: auto;
+      padding: 20px;
+      line-height: 1.65;
     }
 
-    .markdown blockquote {
-      border-left: 4px solid var(--primary);
-      padding: 0.2rem 1rem;
-      color: var(--muted);
-      background: color-mix(in srgb, var(--primary) 8%, transparent);
-      border-radius: 0 12px 12px 0;
+    .copy-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      color: var(--text-3);
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.2s, background 0.2s;
     }
+
+    .markdown pre:hover .copy-btn { opacity: 1; }
+    .copy-btn:hover { background: var(--surface); color: var(--text); }
+    .copy-btn.copied { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 40%, var(--border)); }
 
     .markdown table {
       width: 100%;
       border-collapse: collapse;
+      border-radius: 10px;
       overflow: hidden;
-      border-radius: 12px;
       border: 1px solid var(--border);
+      margin: 1.5em 0;
+      font-size: 0.93em;
     }
 
-    .markdown th,
-    .markdown td {
-      padding: 12px;
-      border-bottom: 1px solid var(--border);
+    .markdown th {
+      background: var(--surface-2);
+      font-weight: 600;
       text-align: left;
     }
+
+    .markdown th, .markdown td {
+      padding: 11px 14px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .markdown tr:last-child td { border-bottom: none; }
 
     .markdown hr {
       border: none;
       border-top: 1px solid var(--border);
-      margin: 2rem 0;
+      margin: 2.5em 0;
     }
 
-    .loading {
-      display: grid;
-      gap: 12px;
+    /* ─── TABLE OF CONTENTS ──────────────────────────────────── */
+    .toc-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .toc-head {
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.82rem;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .toc-head svg {
+      width: 14px; height: 14px;
+      fill: none; stroke: var(--text-3); stroke-width: 2;
+    }
+
+    .toc-list {
+      padding: 10px 8px;
+      list-style: none;
+    }
+
+    .toc-item a {
+      display: block;
+      padding: 6px 12px;
+      border-radius: 7px;
+      font-size: 0.84rem;
+      color: var(--text-2);
+      border: 1px solid transparent;
+      transition: 0.15s;
+      line-height: 1.35;
+    }
+
+    .toc-item a:hover {
+      color: var(--accent);
+      background: var(--accent-glow);
+      border-color: color-mix(in srgb, var(--accent) 20%, var(--border));
+      text-decoration: none;
+    }
+
+    .toc-item.h3 a { padding-left: 24px; font-size: 0.8rem; }
+
+    /* ─── EMPTY / LOADING ────────────────────────────────────── */
+    .empty-state {
+      padding: 40px;
+      text-align: center;
+      color: var(--text-3);
+      font-size: 0.93rem;
     }
 
     .skeleton {
-      height: 18px;
-      border-radius: 10px;
+      border-radius: 8px;
       background: linear-gradient(
         90deg,
-        color-mix(in srgb, var(--panel-solid) 85%, transparent) 25%,
-        color-mix(in srgb, white 8%, var(--panel-solid)) 40%,
-        color-mix(in srgb, var(--panel-solid) 85%, transparent) 60%
+        var(--surface-2) 25%,
+        color-mix(in srgb, white 6%, var(--surface-2)) 40%,
+        var(--surface-2) 60%
       );
       background-size: 200% 100%;
-      animation: shimmer 1.2s infinite linear;
+      animation: shimmer 1.5s infinite linear;
     }
 
-    .skeleton.cardline {
-      height: 110px;
-      border-radius: 18px;
+    .skeleton-card {
+      background: var(--surface);
       border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px 36px;
+      display: grid;
+      gap: 14px;
     }
 
-    .empty-state {
-      padding: 30px;
-      text-align: center;
-      color: var(--muted);
+    /* ─── SCROLL-TO-TOP ──────────────────────────────────────── */
+    #scrollTop {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: var(--accent);
+      color: #0d0f14;
+      border: none;
+      cursor: pointer;
+      display: grid;
+      place-items: center;
+      box-shadow: var(--shadow-md);
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.3s, transform 0.3s;
+      z-index: 50;
     }
 
+    #scrollTop.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    #scrollTop:hover { filter: brightness(1.1); }
+
+    #scrollTop svg {
+      width: 18px; height: 18px;
+      fill: none; stroke: currentColor; stroke-width: 2.5;
+    }
+
+    /* ─── FOOTER ─────────────────────────────────────────────── */
     .footer {
-      text-align: center;
-      color: var(--muted);
-      font-size: 0.9rem;
-      padding: 28px 0 8px;
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 24px 28px 32px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      font-size: 0.84rem;
+      color: var(--text-3);
+    }
+
+    .footer-brand {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-style: italic;
+      color: var(--text-2);
+    }
+
+    /* ─── ANIMATIONS ─────────────────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
 
     @keyframes shimmer {
       from { background-position: 200% 0; }
-      to { background-position: -200% 0; }
+      to   { background-position: -200% 0; }
     }
 
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 0 var(--accent-glow); }
+      50%       { box-shadow: 0 0 0 6px transparent; }
     }
 
+    /* ─── RESPONSIVE ─────────────────────────────────────────── */
     @media (max-width: 960px) {
       .layout {
         grid-template-columns: 1fr;
       }
-
-      .sidebar .card {
+      .sidebar-sticky {
         position: static;
       }
-
-      .post-list {
+      .post-nav {
         max-height: none;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        padding: 12px;
+        gap: 4px;
       }
+      .hero-deco { display: none; }
+      .hero-card { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 640px) {
-      .app,
-      .topbar-inner {
-        padding-left: 16px;
-        padding-right: 16px;
-      }
-
-      .toolbar {
-        width: 100%;
-        justify-content: stretch;
-      }
-
-      .input,
-      .button {
-        width: 100%;
-      }
-
-      .topbar-inner {
-        flex-direction: column;
-        align-items: stretch;
-      }
-
-      .hero-card,
-      .post {
-        padding: 18px;
-      }
+      .topbar-inner { padding: 0 16px; height: auto; padding-top: 12px; padding-bottom: 12px; flex-wrap: wrap; }
+      .toolbar { flex-wrap: wrap; }
+      .search-input { width: 100%; }
+      .search-input:focus { width: 100%; }
+      .hero { padding: 20px 16px 0; }
+      .hero-card { padding: 20px; }
+      .layout { padding: 16px; }
+      .post-header, .post-body { padding: 20px; }
+      .footer { flex-direction: column; text-align: center; }
     }
   </style>
 </head>
 <body>
-  <header class="topbar">
-    <div class="topbar-inner">
-      <div class="brand">
-        <div class="brand-badge">VS</div>
-        <div class="brand-text">
-          <h1>Varun-SV Blog</h1>
-          <p id="repoLabel">Repository: <span id="repoNameLabel"></span></p>
-        </div>
-      </div>
+<!-- Reading progress -->
+<div id="progressBar"></div>
 
-      <div class="toolbar">
-        <input id="searchInput" class="input" type="search" placeholder="Search posts..." aria-label="Search posts" />
-        <button id="themeToggle" class="button" type="button" aria-label="Toggle theme">🌙 Dark</button>
-        <button id="refreshBtn" class="button primary" type="button">Refresh</button>
+<!-- Topbar -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <div class="brand-logo">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 4h16v2H4V4zm0 4h10v2H4V8zm0 4h16v2H4v-2zm0 4h10v2H4v-2z"/>
+        </svg>
+      </div>
+      <div>
+        <div class="brand-title">Varun-SV</div>
+        <div class="brand-subtitle" id="repoLabel">Loading…</div>
       </div>
     </div>
-  </header>
 
-  <main class="app">
-    <section class="hero">
-      <div class="hero-card">
-        <h2>Dynamic blog powered by GitHub</h2>
-        <p>
-          This page loads blog posts directly from a public repository owned by
-          <strong>Varun-SV</strong>, reads each post’s <code>meta.json</code> and <code>content.md</code>,
-          converts markdown to HTML, and renders everything with no backend [1].
-        </p>
-        <div class="status-row">
-          <div class="pill"><span class="dot"></span><span id="statusText">Initializing…</span></div>
-          <div class="pill"><span id="postCount">0 posts</span></div>
-          <div class="pill"><span id="filterCount">0 visible</span></div>
-        </div>
+    <div class="toolbar">
+      <div class="search-wrap">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input id="searchInput" class="search-input" type="search" placeholder="Search posts…" aria-label="Search posts" />
+        <span class="kbd-hint">/</span>
       </div>
-    </section>
+      <button id="themeToggle" class="btn" type="button" aria-label="Toggle theme">
+        <svg id="themeIcon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <span id="themeLabel">Dark</span>
+      </button>
+      <button id="refreshBtn" class="btn btn-accent" type="button">
+        <svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+        Refresh
+      </button>
+    </div>
+  </div>
+</header>
 
-    <section class="layout">
-      <aside class="sidebar">
-        <div class="card">
-          <div class="sidebar-header">
-            <h3>Posts</h3>
-            <p>Sorted by latest date first [1]</p>
-          </div>
-          <div id="postList" class="post-list">
-            <div class="loading">
-              <div class="skeleton cardline"></div>
-              <div class="skeleton cardline"></div>
-              <div class="skeleton cardline"></div>
-            </div>
-          </div>
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-card">
+    <div>
+      <div class="hero-eyebrow">
+        <span class="hero-eyebrow-dot"></span>
+        Live from GitHub
+      </div>
+      <h1 class="hero-title">Writing that<br><em>thinks for itself</em></h1>
+      <p class="hero-desc">
+        Posts load directly from the <strong>Varun-SV</strong> GitHub repository — no backend, no build step. Each post is a <code>meta.json</code> + <code>content.md</code>, fetched, rendered, and read right here.
+      </p>
+      <div class="hero-stats">
+        <div class="stat-chip"><span class="stat-chip-dot"></span><span id="statusText">Initializing…</span></div>
+        <div class="stat-chip"><span id="postCount">0 posts</span></div>
+        <div class="stat-chip"><span id="filterCount">0 visible</span></div>
+      </div>
+    </div>
+    <div class="hero-deco" aria-hidden="true">VS</div>
+  </div>
+</section>
+
+<!-- Main layout -->
+<div class="layout">
+  <!-- Sidebar -->
+  <aside>
+    <div class="sidebar-sticky">
+      <div class="sidebar-card">
+        <div class="sidebar-head">
+          <h3>All Posts</h3>
+          <span class="sidebar-count" id="sidebarCount">0</span>
         </div>
-      </aside>
+        <nav id="postNav" class="post-nav" aria-label="Posts list">
+          <div style="padding:12px;display:grid;gap:8px">
+            <div class="skeleton" style="height:90px;border-radius:10px"></div>
+            <div class="skeleton" style="height:90px;border-radius:10px"></div>
+            <div class="skeleton" style="height:90px;border-radius:10px"></div>
+          </div>
+        </nav>
+      </div>
 
-      <section class="content-panel">
-        <div id="messageArea" class="notice">Loading blog posts...</div>
-        <div id="postsContainer" class="posts"></div>
-      </section>
-    </section>
+      <!-- TOC (populated dynamically) -->
+      <div id="tocCard" class="toc-card" style="display:none">
+        <div class="toc-head">
+          <svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+          On this page
+        </div>
+        <ul id="tocList" class="toc-list"></ul>
+      </div>
+    </div>
+  </aside>
 
-    <footer class="footer">
-      Built with HTML, CSS, Vanilla JavaScript, GitHub REST API, and marked.js [1]
-    </footer>
+  <!-- Content -->
+  <main class="content-area">
+    <div id="messageArea" class="notice">Loading blog posts…</div>
+    <div id="postsContainer"></div>
   </main>
+</div>
 
-  <script>
-    (() => {
-      'use strict';
+<!-- Footer -->
+<footer class="footer">
+  <span class="footer-brand">Varun-SV Blog</span>
+  <span>Built with HTML · GitHub REST API · marked.js · highlight.js</span>
+  <span id="lastRefreshed"></span>
+</footer>
 
-      const GITHUB_USER = 'Varun-SV';
-      const REPO_NAME = 'TheRevProGamers';
-      const BLOG_PATH = 'blog';
-      const API_BASE = `https://api.github.com/repos/${GITHUB_USER}/${REPO_NAME}`;
-      const memoryCache = new Map();
+<!-- Scroll to top -->
+<button id="scrollTop" aria-label="Scroll to top">
+  <svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
+</button>
 
-      const els = {
-        repoNameLabel: document.getElementById('repoNameLabel'),
-        searchInput: document.getElementById('searchInput'),
-        themeToggle: document.getElementById('themeToggle'),
-        refreshBtn: document.getElementById('refreshBtn'),
-        statusText: document.getElementById('statusText'),
-        postCount: document.getElementById('postCount'),
-        filterCount: document.getElementById('filterCount'),
-        postList: document.getElementById('postList'),
-        postsContainer: document.getElementById('postsContainer'),
-        messageArea: document.getElementById('messageArea')
-      };
+<script>
+(() => {
+  'use strict';
 
-      const state = {
-        posts: [],
-        filteredPosts: [],
-        selectedPostId: null,
-        loading: false
-      };
+  /* ── CONFIG ──────────────────────────────────────── */
+  const GITHUB_USER = 'Varun-SV';
+  const REPO_NAME   = 'TheRevProGamers';
+  const BLOG_PATH   = 'blog';
+  const API_BASE    = `https://api.github.com/repos/${GITHUB_USER}/${REPO_NAME}`;
+  const cache       = new Map();
 
-      function setStatus(text) {
-        els.statusText.textContent = text;
-      }
+  /* ── ELEMENTS ────────────────────────────────────── */
+  const $  = id => document.getElementById(id);
+  const el = {
+    progressBar:   $('progressBar'),
+    repoLabel:     $('repoLabel'),
+    searchInput:   $('searchInput'),
+    themeToggle:   $('themeToggle'),
+    themeIcon:     $('themeIcon'),
+    themeLabel:    $('themeLabel'),
+    refreshBtn:    $('refreshBtn'),
+    statusText:    $('statusText'),
+    postCount:     $('postCount'),
+    filterCount:   $('filterCount'),
+    sidebarCount:  $('sidebarCount'),
+    postNav:       $('postNav'),
+    postsContainer:$('postsContainer'),
+    messageArea:   $('messageArea'),
+    tocCard:       $('tocCard'),
+    tocList:       $('tocList'),
+    scrollTop:     $('scrollTop'),
+    lastRefreshed: $('lastRefreshed'),
+  };
 
-      function setMessage(text, type = '') {
-        els.messageArea.className = `notice${type ? ' ' + type : ''}`;
-        els.messageArea.textContent = text;
-      }
+  /* ── STATE ───────────────────────────────────────── */
+  const state = {
+    posts:          [],
+    filteredPosts:  [],
+    activePostId:   null,
+    loading:        false,
+  };
 
-      function saveTheme(theme) {
-        localStorage.setItem('blog-theme', theme);
-      }
+  /* ── THEME ───────────────────────────────────────── */
+  const MOON_ICON = `<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>`;
+  const SUN_ICON  = `<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>`;
 
-      function loadTheme() {
-        return localStorage.getItem('blog-theme') || 'dark';
-      }
+  function applyTheme(t) {
+    document.body.classList.toggle('light', t === 'light');
+    el.themeIcon.innerHTML = t === 'light' ? SUN_ICON : MOON_ICON;
+    el.themeLabel.textContent = t === 'light' ? 'Light' : 'Dark';
+    localStorage.setItem('blog-theme', t);
+  }
 
-      function applyTheme(theme) {
-        document.body.classList.toggle('light', theme === 'light');
-        els.themeToggle.textContent = theme === 'light' ? '☀️ Light' : '🌙 Dark';
-        saveTheme(theme);
-      }
+  function toggleTheme() {
+    applyTheme(document.body.classList.contains('light') ? 'dark' : 'light');
+  }
 
-      function toggleTheme() {
-        const isLight = document.body.classList.contains('light');
-        applyTheme(isLight ? 'dark' : 'light');
-      }
+  /* ── FETCH ───────────────────────────────────────── */
+  async function apiFetch(url, key, force) {
+    if (!force && cache.has(key)) return cache.get(key);
+    const res = await fetch(url, { headers: { Accept: 'application/vnd.github+json' } });
+    if (!res.ok) throw new Error(`HTTP ${res.status} for ${url}`);
+    const ct = res.headers.get('content-type') || '';
+    const data = ct.includes('json') ? await res.json() : await res.text();
+    cache.set(key, data);
+    return data;
+  }
 
-      async function cachedFetch(url, options = {}, cacheKey = url, force = false) {
-        if (!force && memoryCache.has(cacheKey)) {
-          return memoryCache.get(cacheKey);
-        }
+  async function fileText(path, force) {
+    const meta = await apiFetch(`${API_BASE}/contents/${path}`, `meta:${path}`, force);
+    if (meta.download_url) return apiFetch(meta.download_url, `dl:${path}`, force);
+    const bin = atob(meta.content.replace(/\n/g,''));
+    return new TextDecoder().decode(Uint8Array.from(bin, c => c.charCodeAt(0)));
+  }
 
-        const response = await fetch(url, {
-          ...options,
-          headers: {
-            'Accept': 'application/vnd.github+json',
-            ...(options.headers || {})
-          }
-        });
+  async function loadPost(folder, force) {
+    const base = `${BLOG_PATH}/${folder}`;
+    const [metaTxt, md] = await Promise.all([
+      fileText(`${base}/meta.json`, force),
+      fileText(`${base}/content.md`, force),
+    ]);
+    const meta = JSON.parse(metaTxt);
+    const html = marked.parse(md, { gfm: true, breaks: true });
+    return {
+      id:          folder,
+      title:       meta.title  || folder,
+      date:        meta.date   || '',
+      description: meta.description || '',
+      tags:        Array.isArray(meta.tags) ? meta.tags : [],
+      readTime:    estimateReadTime(md),
+      md,
+      html,
+    };
+  }
 
-        if (!response.ok) {
-          const text = await response.text().catch(() => '');
-          throw new Error(`Request failed (${response.status}) for ${url}${text ? `: ${text}` : ''}`);
-        }
+  async function loadAllPosts(force) {
+    const items = await apiFetch(`${API_BASE}/contents/${BLOG_PATH}`, 'blog-root', force);
+    if (!Array.isArray(items)) return { ok: [], err: [] };
+    const dirs   = items.filter(i => i.type === 'dir');
+    const settled = await Promise.allSettled(dirs.map(d => loadPost(d.name, force)));
+    const ok  = settled.filter(r => r.status === 'fulfilled').map(r => r.value);
+    const err = settled.filter(r => r.status === 'rejected').map(r => r.reason);
+    ok.sort((a,b) => new Date(b.date) - new Date(a.date));
+    return { ok, err };
+  }
 
-        const contentType = response.headers.get('content-type') || '';
-        let data;
-        if (contentType.includes('application/json')) {
-          data = await response.json();
-        } else {
-          data = await response.text();
-        }
+  /* ── UTILITIES ───────────────────────────────────── */
+  function esc(s = '') {
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+            .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  }
 
-        memoryCache.set(cacheKey, data);
-        return data;
-      }
+  function fmtDate(d) {
+    if (!d) return 'Undated';
+    const dt = new Date(d);
+    if (isNaN(dt)) return d;
+    return dt.toLocaleDateString(undefined, { year:'numeric', month:'long', day:'numeric' });
+  }
 
-      function clearCache() {
-        memoryCache.clear();
-      }
+  function estimateReadTime(text) {
+    const words = text.trim().split(/\s+/).length;
+    return `${Math.max(1, Math.round(words / 200))} min read`;
+  }
 
-      async function fetchBlogRoot(force = false) {
-        const url = `${API_BASE}/contents/${BLOG_PATH}`;
-        const items = await cachedFetch(url, {}, `blog-root`, force);
-        if (!Array.isArray(items)) return [];
-        return items.filter(item => item.type === 'dir');
-      }
+  /* ── READING PROGRESS ────────────────────────────── */
+  function updateProgress() {
+    const scrolled = window.scrollY;
+    const total    = document.documentElement.scrollHeight - window.innerHeight;
+    el.progressBar.style.width = total > 0 ? `${(scrolled / total) * 100}%` : '0%';
+    el.scrollTop.classList.toggle('visible', scrolled > 400);
+  }
 
-      async function fetchRepoFileText(path, force = false) {
-        const url = `${API_BASE}/contents/${path}`;
-        const file = await cachedFetch(url, {}, `file-meta:${path}`, force);
+  /* ── TABLE OF CONTENTS ───────────────────────────── */
+  function buildToc(container) {
+    const headings = [...container.querySelectorAll('h2, h3')];
+    if (headings.length < 2) { el.tocCard.style.display = 'none'; return; }
 
-        if (file && file.download_url) {
-          return cachedFetch(file.download_url, {}, `download:${path}`, force);
-        }
+    // assign ids
+    headings.forEach((h, i) => {
+      if (!h.id) h.id = `heading-${i}`;
+    });
 
-        if (file && file.content) {
-          return decodeBase64Utf8(file.content);
-        }
+    el.tocList.innerHTML = headings.map(h => `
+      <li class="toc-item ${h.tagName.toLowerCase()}">
+        <a href="#${h.id}">${esc(h.textContent)}</a>
+      </li>
+    `).join('');
+    el.tocCard.style.display = '';
+  }
 
-        throw new Error(`Unable to read file: ${path}`);
-      }
+  /* ── COPY TO CLIPBOARD ───────────────────────────── */
+  function attachCopyButtons(container) {
+    container.querySelectorAll('pre').forEach(pre => {
+      const btn = document.createElement('button');
+      btn.className = 'copy-btn';
+      btn.textContent = 'Copy';
+      btn.addEventListener('click', async () => {
+        const code = pre.querySelector('code')?.textContent || '';
+        await navigator.clipboard.writeText(code).catch(() => {});
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1800);
+      });
+      pre.style.position = 'relative';
+      pre.appendChild(btn);
+    });
+  }
 
-      function decodeBase64Utf8(base64) {
-        const binary = atob(base64.replace(/\n/g, ''));
-        const bytes = Uint8Array.from(binary, c => c.charCodeAt(0));
-        return new TextDecoder().decode(bytes);
-      }
+  /* ── RENDER ──────────────────────────────────────── */
+  function renderSidebar(posts) {
+    el.sidebarCount.textContent = posts.length;
+    if (!posts.length) {
+      el.postNav.innerHTML = `<div class="empty-state">No posts found.</div>`;
+      return;
+    }
+    el.postNav.innerHTML = posts.map((p, i) => `
+      <a href="#${encodeURIComponent(p.id)}"
+         class="post-nav-item${state.activePostId === p.id || (!state.activePostId && i === 0) ? ' active' : ''}"
+         data-id="${esc(p.id)}"
+         style="animation-delay:${i * 45}ms">
+        <div class="nav-title">${esc(p.title)}</div>
+        <div class="nav-meta">${esc(fmtDate(p.date))} · ${esc(p.readTime)}</div>
+        <div class="nav-desc">${esc(p.description)}</div>
+        ${p.tags.length ? `<div class="nav-tags">${p.tags.map(t=>`<span class="tag">${esc(t)}</span>`).join('')}</div>` : ''}
+      </a>
+    `).join('');
 
-      async function fetchPost(folderName, force = false) {
-        const basePath = `${BLOG_PATH}/${folderName}`;
-        const [metaText, markdown] = await Promise.all([
-          fetchRepoFileText(`${basePath}/meta.json`, force),
-          fetchRepoFileText(`${basePath}/content.md`, force)
-        ]);
+    el.postNav.querySelectorAll('.post-nav-item').forEach(a => {
+      a.addEventListener('click', () => {
+        state.activePostId = a.dataset.id;
+        highlightActive();
+        // smooth scroll to post
+        const target = document.getElementById(encodeURIComponent(a.dataset.id));
+        if (target) target.scrollIntoView({ behavior:'smooth', block:'start' });
+      });
+    });
+  }
 
-        const meta = JSON.parse(metaText);
+  function highlightActive() {
+    el.postNav.querySelectorAll('.post-nav-item').forEach(a => {
+      a.classList.toggle('active', a.dataset.id === state.activePostId);
+    });
+  }
 
-        return {
-          id: folderName,
-          slug: folderName,
-          title: meta.title || folderName,
-          date: meta.date || '',
-          description: meta.description || '',
-          markdown,
-          html: marked.parse(markdown, { breaks: true, gfm: true })
-        };
-      }
+  function renderPosts(posts) {
+    if (!posts.length) {
+      el.postsContainer.innerHTML = `<div class="sidebar-card empty-state">No posts match your search.</div>`;
+      el.tocCard.style.display = 'none';
+      return;
+    }
 
-      async function fetchAllPosts(force = false) {
-        const folders = await fetchBlogRoot(force);
-        const posts = await Promise.allSettled(
-          folders.map(folder => fetchPost(folder.name, force))
-        );
-
-        const validPosts = [];
-        const failedPosts = [];
-
-        for (const result of posts) {
-          if (result.status === 'fulfilled') {
-            validPosts.push(result.value);
-          } else {
-            failedPosts.push(result.reason);
-          }
-        }
-
-        validPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
-        return { validPosts, failedPosts };
-      }
-
-      function formatDate(dateString) {
-        if (!dateString) return 'Unknown date';
-        const date = new Date(dateString);
-        if (Number.isNaN(date.getTime())) return dateString;
-        return new Intl.DateTimeFormat(undefined, {
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric'
-        }).format(date);
-      }
-
-      function escapeHtml(str = '') {
-        return str
-          .replaceAll('&', '&amp;')
-          .replaceAll('<', '&lt;')
-          .replaceAll('>', '&gt;')
-          .replaceAll('"', '&quot;')
-          .replaceAll("'", '&#39;');
-      }
-
-      function renderSidebar(posts) {
-        if (!posts.length) {
-          els.postList.innerHTML = `<div class="empty-state">No posts found in this repository.</div>`;
-          return;
-        }
-
-        els.postList.innerHTML = posts.map((post, index) => `
-          <a href="#${encodeURIComponent(post.id)}"
-             class="post-link ${state.selectedPostId ? (state.selectedPostId === post.id ? 'active' : '') : (index === 0 ? 'active' : '')}"
-             data-post-id="${escapeHtml(post.id)}">
-            <div class="post-link-title">${escapeHtml(post.title)}</div>
-            <div class="post-link-meta">${escapeHtml(formatDate(post.date))}</div>
-            <div class="post-link-desc">${escapeHtml(post.description)}</div>
-          </a>
-        `).join('');
-
-        els.postList.querySelectorAll('.post-link').forEach(link => {
-          link.addEventListener('click', () => {
-            state.selectedPostId = link.dataset.postId;
-            highlightActiveSidebarLink();
-          });
-        });
-      }
-
-      function highlightActiveSidebarLink() {
-        const links = els.postList.querySelectorAll('.post-link');
-        links.forEach(link => {
-          link.classList.toggle('active', link.dataset.postId === state.selectedPostId);
-        });
-      }
-
-      function renderPosts(posts) {
-        if (!posts.length) {
-          els.postsContainer.innerHTML = `
-            <div class="card empty-state">
-              No posts match your current search.
-            </div>
-          `;
-          return;
-        }
-
-        els.postsContainer.innerHTML = posts.map(post => `
-          <article class="card post" id="${encodeURIComponent(post.id)}">
-            <header class="post-header">
-              <h2 class="post-title">${escapeHtml(post.title)}</h2>
-              <div class="post-meta">
-                <span>${escapeHtml(formatDate(post.date))}</span>
-                <span>•</span>
-                <span>${escapeHtml(post.slug)}</span>
-              </div>
-              <p class="post-description">${escapeHtml(post.description)}</p>
-            </header>
-            <section class="markdown">${post.html}</section>
-          </article>
-        `).join('');
-      }
-
-      function renderLoading() {
-        els.postList.innerHTML = `
-          <div class="loading">
-            <div class="skeleton cardline"></div>
-            <div class="skeleton cardline"></div>
-            <div class="skeleton cardline"></div>
+    el.postsContainer.innerHTML = posts.map((p, i) => `
+      <article class="post-article" id="${encodeURIComponent(p.id)}" style="animation-delay:${i * 60}ms">
+        <header class="post-header">
+          ${p.tags.length ? `<div class="post-tags">${p.tags.map(t=>`<span class="post-tag">${esc(t)}</span>`).join('')}</div>` : ''}
+          <h2 class="post-title">${esc(p.title)}</h2>
+          <div class="post-meta-row">
+            <span>${esc(fmtDate(p.date))}</span>
+            <span class="sep">·</span>
+            <span>${esc(p.readTime)}</span>
+            <span class="sep">·</span>
+            <span>${esc(p.id)}</span>
           </div>
-        `;
-        els.postsContainer.innerHTML = `
-          <div class="card post">
-            <div class="loading">
-              <div class="skeleton" style="width: 45%; height: 34px;"></div>
-              <div class="skeleton" style="width: 28%;"></div>
-              <div class="skeleton" style="width: 90%;"></div>
-              <div class="skeleton" style="width: 98%;"></div>
-              <div class="skeleton" style="width: 92%;"></div>
-              <div class="skeleton" style="width: 85%;"></div>
-              <div class="skeleton" style="width: 96%; height: 180px;"></div>
-            </div>
-          </div>
-        `;
+          ${p.description ? `<p class="post-desc">${esc(p.description)}</p>` : ''}
+        </header>
+        <div class="post-body">
+          <div class="markdown" data-post-id="${esc(p.id)}">${p.html}</div>
+        </div>
+      </article>
+    `).join('');
+
+    // highlight.js + copy buttons + TOC (first post)
+    el.postsContainer.querySelectorAll('pre code').forEach(block => {
+      hljs.highlightElement(block);
+    });
+
+    el.postsContainer.querySelectorAll('.post-article').forEach(article => {
+      attachCopyButtons(article);
+    });
+
+    // build TOC from first post
+    const firstMd = el.postsContainer.querySelector('.markdown');
+    if (firstMd) buildToc(firstMd);
+  }
+
+  function renderLoading() {
+    el.postNav.innerHTML = `<div style="padding:12px;display:grid;gap:8px">
+      ${[1,2,3].map(()=>`<div class="skeleton" style="height:88px;border-radius:10px"></div>`).join('')}
+    </div>`;
+    el.postsContainer.innerHTML = `
+      <div class="skeleton-card">
+        <div class="skeleton" style="height:16px;width:30%"></div>
+        <div class="skeleton" style="height:42px;width:70%"></div>
+        <div class="skeleton" style="height:14px;width:40%"></div>
+        <div class="skeleton" style="height:14px;width:90%"></div>
+        <div class="skeleton" style="height:14px;width:85%"></div>
+        <div class="skeleton" style="height:200px;margin-top:8px;border-radius:12px"></div>
+      </div>`;
+  }
+
+  function updateCounts(total, visible) {
+    el.postCount.textContent  = `${total} post${total===1?'':'s'}`;
+    el.filterCount.textContent = `${visible} visible`;
+  }
+
+  function setStatus(t)       { el.statusText.textContent = t; }
+  function setMessage(t, cls) {
+    el.messageArea.className = `notice${cls ? ' '+cls : ''}`;
+    el.messageArea.textContent = t;
+  }
+
+  /* ── SEARCH ──────────────────────────────────────── */
+  function applySearch() {
+    const q = el.searchInput.value.trim().toLowerCase();
+    state.filteredPosts = q
+      ? state.posts.filter(p =>
+          `${p.title} ${p.description} ${p.md} ${p.id} ${p.tags.join(' ')}`.toLowerCase().includes(q)
+        )
+      : [...state.posts];
+
+    renderSidebar(state.filteredPosts);
+    renderPosts(state.filteredPosts);
+    updateCounts(state.posts.length, state.filteredPosts.length);
+
+    if (state.filteredPosts.length && (!state.activePostId || !state.filteredPosts.find(p=>p.id===state.activePostId))) {
+      state.activePostId = state.filteredPosts[0].id;
+    }
+    highlightActive();
+
+    setMessage(
+      q ? `${state.filteredPosts.length} result${state.filteredPosts.length===1?'':'s'} for "${q}"`
+        : `${state.posts.length} post${state.posts.length===1?'':'s'} loaded from ${REPO_NAME}`
+    );
+  }
+
+  /* ── LOAD ────────────────────────────────────────── */
+  async function load(force = false) {
+    if (state.loading) return;
+    state.loading = true;
+    state.activePostId = null;
+    el.tocCard.style.display = 'none';
+    renderLoading();
+    setStatus(`Fetching ${REPO_NAME}…`);
+    setMessage(`Loading posts from ${REPO_NAME}…`);
+    el.repoLabel.textContent = `${GITHUB_USER}/${REPO_NAME}`;
+
+    try {
+      const { ok, err } = await loadAllPosts(force);
+      state.posts         = ok;
+      state.filteredPosts = [...ok];
+      state.activePostId  = ok[0]?.id || null;
+
+      renderSidebar(ok);
+      renderPosts(ok);
+      updateCounts(ok.length, ok.length);
+
+      const now = new Date().toLocaleTimeString(undefined, { hour:'2-digit', minute:'2-digit' });
+      el.lastRefreshed.textContent = `Updated ${now}`;
+
+      if (!ok.length) {
+        setStatus('No posts found');
+        setMessage(`No valid posts found in "${REPO_NAME}/blog".`, 'error');
+      } else if (err.length) {
+        setStatus('Loaded with warnings');
+        setMessage(`${ok.length} post${ok.length===1?'':'s'} loaded. ${err.length} could not be parsed.`, 'error');
+      } else {
+        setStatus(`${ok.length} post${ok.length===1?'':'s'} loaded`);
+        setMessage(`${ok.length} post${ok.length===1?'':'s'} loaded from ${REPO_NAME}`);
       }
+    } catch (e) {
+      console.error(e);
+      state.posts = state.filteredPosts = [];
+      renderSidebar([]);
+      renderPosts([]);
+      updateCounts(0, 0);
+      setStatus('Failed to load');
+      setMessage(`Could not reach "${REPO_NAME}". Check the repo name or your connection.`, 'error');
+    } finally {
+      state.loading = false;
+    }
+  }
 
-      function updateCounts(total, visible) {
-        els.postCount.textContent = `${total} post${total === 1 ? '' : 's'}`;
-        els.filterCount.textContent = `${visible} visible`;
+  /* ── INIT ────────────────────────────────────────── */
+  function init() {
+    // Theme
+    applyTheme(localStorage.getItem('blog-theme') || 'dark');
+    el.themeToggle.addEventListener('click', toggleTheme);
+
+    // Refresh
+    el.refreshBtn.addEventListener('click', () => { cache.clear(); load(true); });
+
+    // Search
+    el.searchInput.addEventListener('input', () => { if (!state.loading) applySearch(); });
+
+    // Keyboard shortcut
+    document.addEventListener('keydown', e => {
+      if (e.key === '/' && document.activeElement !== el.searchInput) {
+        e.preventDefault();
+        el.searchInput.focus();
       }
+      if (e.key === 'Escape') el.searchInput.blur();
+    });
 
-      function applySearch() {
-        const query = els.searchInput.value.trim().toLowerCase();
-        state.filteredPosts = state.posts.filter(post => {
-          const haystack = `${post.title} ${post.description} ${post.markdown} ${post.slug}`.toLowerCase();
-          return haystack.includes(query);
-        });
+    // Scroll
+    window.addEventListener('scroll', updateProgress, { passive: true });
+    el.scrollTop.addEventListener('click', () => window.scrollTo({ top:0, behavior:'smooth' }));
 
-        renderSidebar(state.filteredPosts);
-        renderPosts(state.filteredPosts);
-        updateCounts(state.posts.length, state.filteredPosts.length);
+    // Hash nav
+    window.addEventListener('hashchange', () => {
+      const hash = decodeURIComponent(location.hash.slice(1));
+      if (hash) { state.activePostId = hash; highlightActive(); }
+    });
 
-        if (state.filteredPosts.length) {
-          if (!state.selectedPostId || !state.filteredPosts.some(p => p.id === state.selectedPostId)) {
-            state.selectedPostId = state.filteredPosts[0].id;
-          }
-          highlightActiveSidebarLink();
-        }
+    // marked options
+    marked.setOptions({ gfm: true, breaks: true });
 
-        setMessage(
-          query
-            ? `Showing ${state.filteredPosts.length} result${state.filteredPosts.length === 1 ? '' : 's'} for “${query}”.`
-            : `Loaded ${state.posts.length} post${state.posts.length === 1 ? '' : 's'} from ${REPO_NAME}.`
-        );
-      }
+    load();
+  }
 
-      async function loadPosts(force = false) {
-        state.loading = true;
-        state.selectedPostId = null;
-        renderLoading();
-        setStatus(`Loading ${REPO_NAME}…`);
-        setMessage(`Fetching blog posts from ${REPO_NAME}...`);
-        els.repoNameLabel.textContent = REPO_NAME;
-
-        try {
-          const { validPosts, failedPosts } = await fetchAllPosts(force);
-          state.posts = validPosts;
-          state.filteredPosts = validPosts;
-          state.selectedPostId = validPosts[0]?.id || null;
-
-          renderSidebar(validPosts);
-          renderPosts(validPosts);
-          updateCounts(validPosts.length, validPosts.length);
-
-          if (!validPosts.length) {
-            setStatus(`No posts in ${REPO_NAME}`);
-            setMessage(`Repository "${REPO_NAME}" has a /blog folder but no valid posts were found.`, 'error');
-          } else if (failedPosts.length) {
-            setStatus(`Loaded with warnings`);
-            setMessage(`Loaded ${validPosts.length} post(s) from ${REPO_NAME}. ${failedPosts.length} post(s) could not be parsed.`, 'error');
-          } else {
-            setStatus(`Loaded ${validPosts.length} post${validPosts.length === 1 ? '' : 's'}`);
-            setMessage(`Loaded ${validPosts.length} post${validPosts.length === 1 ? '' : 's'} from ${REPO_NAME}.`);
-          }
-        } catch (error) {
-          console.error(error);
-          state.posts = [];
-          state.filteredPosts = [];
-          renderSidebar([]);
-          renderPosts([]);
-          updateCounts(0, 0);
-          setStatus('Load failed');
-          setMessage(`Failed to load blog data from "${REPO_NAME}". Please check the repository name and try again.`, 'error');
-        } finally {
-          state.loading = false;
-        }
-      }
-
-      function bindEvents() {
-        els.themeToggle.addEventListener('click', toggleTheme);
-        els.searchInput.addEventListener('input', () => {
-          if (!state.loading) applySearch();
-        });
-        els.refreshBtn.addEventListener('click', async () => {
-          clearCache();
-          await loadPosts(true);
-        });
-
-        window.addEventListener('hashchange', () => {
-          const hash = decodeURIComponent(location.hash.slice(1));
-          if (!hash) return;
-          state.selectedPostId = hash;
-          highlightActiveSidebarLink();
-        });
-      }
-
-      async function init() {
-        bindEvents();
-        applyTheme(loadTheme());
-
-        marked.setOptions({
-          gfm: true,
-          breaks: true,
-          headerIds: true,
-          mangle: false
-        });
-
-        await loadPosts(false);
-      }
-
-      init();
-    })();
-  </script>
+  init();
+})();
+</script>
 </body>
 </html>
