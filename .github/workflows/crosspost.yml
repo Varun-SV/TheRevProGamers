@@ -1,0 +1,80 @@
+name: Cross-post new blog entries
+
+# Fires when a post lands on main.
+#
+# Auto-posts to every platform with a real write API (Discord, Telegram,
+# Mastodon, Dev.to) and opens a GitHub issue holding paste-ready text for the
+# two that have no write API at all — Patreon and Buy Me a Coffee. See the
+# header comment in scripts/crosspost.mjs for the details on why.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'content/blog/**.md'
+  workflow_dispatch:
+    inputs:
+      slug:
+        description: 'Post slug to cross-post (blank = posts from the last commit)'
+        required: false
+        type: string
+      dry_run:
+        description: 'Render everything but send nothing'
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  crosspost:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # crosspost.mjs diffs HEAD against its parent to find new posts.
+          fetch-depth: 2
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Cross-post
+        env:
+          SITE_URL: ${{ vars.SITE_URL }}
+          SITE_NAME: ${{ vars.SITE_NAME }}
+          BMC_USERNAME: ${{ vars.BMC_USERNAME }}
+          PATREON_URL: ${{ vars.PATREON_URL }}
+          BMC_URL: ${{ vars.BMC_URL }}
+          AMAZON_ASSOCIATE_TAG: ${{ secrets.AMAZON_ASSOCIATE_TAG }}
+          # Auto-post targets — each is optional and skipped when unset.
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          MASTODON_INSTANCE_URL: ${{ vars.MASTODON_INSTANCE_URL }}
+          MASTODON_ACCESS_TOKEN: ${{ secrets.MASTODON_ACCESS_TOKEN }}
+          DEVTO_API_KEY: ${{ secrets.DEVTO_API_KEY }}
+          # Used to open the reminder issue with the paste-ready Patreon/BMC text.
+          GH_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: |
+          ARGS=""
+          if [ -n "${{ inputs.slug }}" ]; then ARGS="--post ${{ inputs.slug }}"; fi
+          if [ "${{ inputs.dry_run }}" = "true" ]; then ARGS="$ARGS --dry-run"; fi
+          node scripts/crosspost.mjs $ARGS
+
+      # The drafts contain full post text; keep them off the repo but available
+      # for download from the run summary for 7 days.
+      - name: Upload drafts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: crosspost-drafts
+          path: .crosspost/
+          retention-days: 7
+          if-no-files-found: ignore

@@ -1,0 +1,28 @@
+{
+  "_comment": "SAMPLE DATA — replaced automatically on the first successful build, since public repo data needs no token at all. GH_API_TOKEN only raises the rate limit.",
+  "ok": false,
+  "sample": true,
+  "configured": true,
+  "username": "Varun-SV",
+  "profileUrl": "https://github.com/Varun-SV",
+  "user": null,
+  "repos": [
+    {
+      "id": 0,
+      "name": "TheRevProGamers",
+      "fullName": "Varun-SV/TheRevProGamers",
+      "description": "This site — a static blog, project index and supporter hub that builds itself from Markdown and a handful of APIs.",
+      "url": "https://github.com/Varun-SV/TheRevProGamers",
+      "homepage": "https://therevprogamers.com",
+      "language": "JavaScript",
+      "stars": 0,
+      "forks": 0,
+      "topics": ["blog", "static-site", "github-pages"],
+      "updatedAt": "",
+      "createdAt": "",
+      "isPinned": true,
+      "license": "MIT"
+    }
+  ],
+  "totals": { "repos": 1, "stars": 0, "forks": 0 }
+}

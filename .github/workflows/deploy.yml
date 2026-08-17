@@ -1,0 +1,84 @@
+name: Build and deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      # Pulls live data into content/data/generated/ using the secrets below.
+      # Every one of these is optional — an unset secret just means that
+      # integration falls back to content/data/fallback/*.json and the build
+      # carries on. Nothing here can fail the deploy.
+      - name: Fetch integration data
+        env:
+          YOUTUBE_CHANNEL_ID: ${{ secrets.YOUTUBE_CHANNEL_ID }}
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+          PATREON_ACCESS_TOKEN: ${{ secrets.PATREON_ACCESS_TOKEN }}
+          PATREON_CAMPAIGN_ID: ${{ secrets.PATREON_CAMPAIGN_ID }}
+          BMC_ACCESS_TOKEN: ${{ secrets.BMC_ACCESS_TOKEN }}
+          # A secret may not be named with the GITHUB_ prefix — that namespace
+          # is reserved — so the built-in token is passed through GH_API_TOKEN.
+          GH_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_USERNAME: ${{ vars.GH_USERNAME }}
+          PINNED_REPOS: ${{ vars.PINNED_REPOS }}
+        run: npm run fetch
+
+      - name: Build
+        env:
+          SITE_URL: ${{ vars.SITE_URL }}
+          SITE_NAME: ${{ vars.SITE_NAME }}
+          SITE_TAGLINE: ${{ vars.SITE_TAGLINE }}
+          AUTHOR_NAME: ${{ vars.AUTHOR_NAME }}
+          CONTACT_EMAIL: ${{ vars.CONTACT_EMAIL }}
+          YOUTUBE_HANDLE: ${{ vars.YOUTUBE_HANDLE }}
+          PATREON_URL: ${{ vars.PATREON_URL }}
+          BMC_URL: ${{ vars.BMC_URL }}
+          BMC_USERNAME: ${{ vars.BMC_USERNAME }}
+          GH_USERNAME: ${{ vars.GH_USERNAME }}
+          AMAZON_ASSOCIATE_TAG: ${{ secrets.AMAZON_ASSOCIATE_TAG }}
+          SHOW_SUPPORTER_NAMES: ${{ vars.SHOW_SUPPORTER_NAMES }}
+          SHOW_SUPPORTER_MESSAGES: ${{ vars.SHOW_SUPPORTER_MESSAGES }}
+        run: npm run build
+
+      - name: Verify build output
+        run: |
+          test -f dist/index.html || { echo "::error::dist/index.html missing"; exit 1; }
+          test -f dist/feed.xml   || { echo "::error::dist/feed.xml missing"; exit 1; }
+          echo "Built $(find dist -name '*.html' | wc -l) HTML pages"
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,0 +1,25 @@
+{
+  "name": "therevprogamers",
+  "version": "1.0.0",
+  "private": true,
+  "description": "TheRevProGamers — blog, projects, videos, reviews and supporter hub.",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "node src/build.mjs",
+    "fetch": "node scripts/fetch-data.mjs",
+    "fetch:build": "node scripts/fetch-data.mjs && node src/build.mjs",
+    "dev": "node src/server.mjs --dev",
+    "start": "node src/server.mjs",
+    "serve": "node src/server.mjs",
+    "crosspost": "node scripts/crosspost.mjs",
+    "new": "node scripts/new-post.mjs"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "highlight.js": "^11.12.0",
+    "marked": "^15.0.7"
+  }
+}

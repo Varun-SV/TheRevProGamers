@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+npm-debug.log*
+.pnpm-debug.log*
+
+# Build output
+dist/
+
+# Live data pulled from APIs at build time.
+# IMPORTANT: never commit this. Patreon and Buy Me a Coffee responses contain
+# real supporters' names, and this repository is intended to be public.
+# CI regenerates these on every build from content/data/fallback/*.json + secrets.
+content/data/generated/
+
+# Cross-post drafts generated on publish (may contain unpublished copy)
+.crosspost/
+
+# Local environment
+.env
+.env.*
+!.env.example
+
+# Editor / OS noise
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
