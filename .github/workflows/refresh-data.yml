@@ -10,8 +10,13 @@ name: Refresh integration data
 
 on:
   schedule:
-    # Every six hours, at a minute chosen to avoid the top-of-hour rush.
-    - cron: '17 */6 * * *'
+    # Twice a day, at a minute chosen to avoid the top-of-hour rush.
+    #
+    # Each firing triggers a full deploy build, so this costs Actions minutes.
+    # PRIVATE repos draw on a limited monthly allowance; PUBLIC repos get
+    # standard runners free with no minute cap. If this repo is public, '17
+    # */6 * * *' (four times a day) is perfectly affordable.
+    - cron: '17 4,16 * * *'
   workflow_dispatch:
 
 permissions:
