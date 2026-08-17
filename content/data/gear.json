@@ -1,0 +1,84 @@
+{
+  "_comment": "Your affiliate / gear list. Edit freely — this file is the single source for the /gear/ page and for `gear:` references in post front matter. If AMAZON_ASSOCIATE_TAG is set, bare amazon.* URLs below get the tag appended automatically at build time, so you never have to paste tagged links by hand.",
+
+  "items": [
+    {
+      "id": "main-keyboard",
+      "name": "75% Hot-swap Mechanical Keyboard",
+      "category": "Desk",
+      "blurb": "Gasket mount, hot-swap sockets, and a knob I use far more than I expected. The board I type every post on.",
+      "why": "Hot-swap means I can change switches without a soldering iron, which matters a lot when you review keyboards for a living.",
+      "image": "/assets/gear/keyboard.svg",
+      "url": "https://www.amazon.com/dp/PLACEHOLDER-KEYBOARD",
+      "price": "$$",
+      "rating": 9,
+      "tags": ["keyboard", "desk", "daily-driver"],
+      "featured": true
+    },
+    {
+      "id": "main-mouse",
+      "name": "Lightweight Wireless Gaming Mouse",
+      "category": "Desk",
+      "blurb": "Sub-60g, no perceptible latency over its own dongle, and the battery genuinely lasts a working week.",
+      "why": "The weight is the whole point. Going back to a 100g mouse now feels like dragging a brick.",
+      "image": "/assets/gear/mouse.svg",
+      "url": "https://www.amazon.com/dp/PLACEHOLDER-MOUSE",
+      "price": "$$",
+      "rating": 9,
+      "tags": ["mouse", "gaming"],
+      "featured": true
+    },
+    {
+      "id": "capture-mic",
+      "name": "USB Condenser Microphone",
+      "category": "Studio",
+      "blurb": "What every voiceover on the channel is recorded through. Cardioid, onboard monitoring, no interface needed.",
+      "why": "It is the cheapest single upgrade that makes a video sound less amateur. Audio matters more than resolution.",
+      "image": "/assets/gear/microphone.svg",
+      "url": "https://www.amazon.com/dp/PLACEHOLDER-MIC",
+      "price": "$$",
+      "rating": 8,
+      "tags": ["audio", "youtube", "studio"],
+      "featured": true
+    },
+    {
+      "id": "monitor-main",
+      "name": "27\" 1440p 165Hz IPS Monitor",
+      "category": "Desk",
+      "blurb": "The resolution and refresh sweet spot. High enough DPI to read code all day, fast enough that games feel right.",
+      "why": "1440p at 27\" is the size where you stop noticing pixels without needing to scale the UI.",
+      "image": "/assets/gear/monitor.svg",
+      "url": "https://www.amazon.com/dp/PLACEHOLDER-MONITOR",
+      "price": "$$$",
+      "rating": 9,
+      "tags": ["monitor", "display"],
+      "featured": true
+    },
+    {
+      "id": "headphones",
+      "name": "Open-back Studio Headphones",
+      "category": "Studio",
+      "blurb": "Open-back, flat response, and comfortable enough for a six-hour editing session.",
+      "why": "Flat response means what I mix sounds the same on other people's speakers. Open-back means my ears survive.",
+      "image": "/assets/gear/headphones.svg",
+      "url": "https://www.amazon.com/dp/PLACEHOLDER-HEADPHONES",
+      "price": "$$",
+      "rating": 8,
+      "tags": ["audio", "editing"],
+      "featured": false
+    },
+    {
+      "id": "ssd-external",
+      "name": "1TB Portable NVMe SSD",
+      "category": "Storage",
+      "blurb": "Where raw footage lives before it gets edited. Fast enough to cut 4K directly off the drive.",
+      "why": "Editing straight from the external drive removes an entire copy step from my workflow.",
+      "image": "/assets/gear/ssd.svg",
+      "url": "https://www.amazon.com/dp/PLACEHOLDER-SSD",
+      "price": "$$",
+      "rating": 9,
+      "tags": ["storage", "video"],
+      "featured": false
+    }
+  ]
+}

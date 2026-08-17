@@ -1,0 +1,54 @@
+{
+  "_comment": "SAMPLE DATA — shown only until YOUTUBE_CHANNEL_ID (and optionally YOUTUBE_API_KEY) are set. Once they are, content/data/generated/youtube.json replaces this automatically.",
+  "ok": false,
+  "sample": true,
+  "source": "fallback",
+  "channel": {
+    "id": "",
+    "title": "TheRevProGamers",
+    "handle": "@therevprogamers",
+    "url": "https://www.youtube.com/@therevprogamers",
+    "thumbnail": "",
+    "subscribers": null,
+    "subscribersDisplay": "",
+    "videoCount": null
+  },
+  "videos": [
+    {
+      "id": "",
+      "title": "Your latest upload will appear here",
+      "description": "Set YOUTUBE_CHANNEL_ID in your repository secrets and this grid fills itself from the channel feed on every build.",
+      "publishedAt": "",
+      "url": "https://www.youtube.com/@therevprogamers",
+      "thumbnail": "/assets/video-placeholder.svg",
+      "views": null,
+      "viewsDisplay": "",
+      "likes": null,
+      "duration": ""
+    },
+    {
+      "id": "",
+      "title": "…along with the five before it",
+      "description": "Thumbnails, titles, durations and view counts all come straight from YouTube — nothing to update by hand.",
+      "publishedAt": "",
+      "url": "https://www.youtube.com/@therevprogamers",
+      "thumbnail": "/assets/video-placeholder.svg",
+      "views": null,
+      "viewsDisplay": "",
+      "likes": null,
+      "duration": ""
+    },
+    {
+      "id": "",
+      "title": "Refreshed on a schedule",
+      "description": "A GitHub Action re-fetches the channel every six hours so the site never drifts far behind the channel.",
+      "publishedAt": "",
+      "url": "https://www.youtube.com/@therevprogamers",
+      "thumbnail": "/assets/video-placeholder.svg",
+      "views": null,
+      "viewsDisplay": "",
+      "likes": null,
+      "duration": ""
+    }
+  ]
+}

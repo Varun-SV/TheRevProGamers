@@ -1,0 +1,49 @@
+{
+  "_comment": "SAMPLE DATA — shown only until PATREON_ACCESS_TOKEN is set. Real tier names, amounts and patron names then come from the Patreon API. Emails are never requested or stored.",
+  "ok": false,
+  "sample": true,
+  "configured": false,
+  "url": "https://www.patreon.com/cw/VarunSV",
+  "campaign": {
+    "id": "",
+    "name": "TheRevProGamers",
+    "summary": "Support the channel and the writing, get things earlier and with fewer edges sanded off.",
+    "url": "https://www.patreon.com/cw/VarunSV",
+    "image": "",
+    "patronCount": null
+  },
+  "tiers": [
+    {
+      "id": "sample-1",
+      "title": "Supporter",
+      "amountCents": 300,
+      "amountDisplay": "$3",
+      "description": "You keep the lights on. Name on the supporters wall and my genuine thanks.",
+      "patronCount": null,
+      "image": "",
+      "url": "https://www.patreon.com/cw/VarunSV"
+    },
+    {
+      "id": "sample-2",
+      "title": "Early Access",
+      "amountCents": 700,
+      "amountDisplay": "$7",
+      "description": "Posts and videos before they go public, plus the raw notes and benchmark spreadsheets behind each review.",
+      "patronCount": null,
+      "image": "",
+      "url": "https://www.patreon.com/cw/VarunSV"
+    },
+    {
+      "id": "sample-3",
+      "title": "Workshop",
+      "amountCents": 1500,
+      "amountDisplay": "$15",
+      "description": "Everything above, plus a say in what gets reviewed next and access to the project repos while they are still ugly.",
+      "patronCount": null,
+      "image": "",
+      "url": "https://www.patreon.com/cw/VarunSV"
+    }
+  ],
+  "patrons": [],
+  "patronCount": null
+}

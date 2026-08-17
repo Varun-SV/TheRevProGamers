@@ -1,0 +1,13 @@
+[build]
+builder = "NIXPACKS"
+# Fetch live data first so the built pages carry real numbers, then build.
+# `npm run fetch` never fails the build — unset integrations fall back to
+# content/data/fallback/*.json.
+buildCommand = "npm ci && npm run fetch && npm run build"
+
+[deploy]
+startCommand = "npm start"
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 5
+healthcheckPath = "/api/health"
+healthcheckTimeout = 30

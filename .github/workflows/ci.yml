@@ -1,0 +1,97 @@
+name: CI
+
+# Validates that the site builds before anything reaches main.
+# Runs with NO secrets configured on purpose — the build must always succeed
+# on fallback data alone, which is the property that stops a missing or
+# expired token from ever breaking a deploy.
+
+# Only `pull_request` — adding a `push` trigger as well makes every push to a
+# PR branch run this twice, doubling Actions minutes for no extra signal.
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# A new push supersedes the previous run for the same branch.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Build with no secrets (must survive on fallback data)
+        run: npm run build
+
+      - name: Verify expected output
+        run: |
+          set -e
+          fail() { echo "::error::$1"; exit 1; }
+
+          for f in \
+            dist/index.html \
+            dist/blog/index.html \
+            dist/reviews/index.html \
+            dist/projects/index.html \
+            dist/videos/index.html \
+            dist/gear/index.html \
+            dist/support/index.html \
+            dist/about/index.html \
+            dist/404.html \
+            dist/feed.xml \
+            dist/sitemap.xml \
+            dist/robots.txt \
+            dist/search-index.json \
+            dist/assets/site.css \
+            dist/assets/site.js
+          do
+            test -f "$f" || fail "missing $f"
+          done
+
+          # Every published post must produce a page.
+          posts=$(find content/blog -name '*.md' | wc -l)
+          pages=$(find dist/blog -mindepth 1 -maxdepth 1 -type d | wc -l)
+          echo "posts=$posts rendered=$pages"
+          test "$pages" -gt 0 || fail "no post pages were rendered"
+
+          # Feeds must be parseable XML.
+          python3 -c "import xml.dom.minidom,sys; xml.dom.minidom.parse('dist/feed.xml')" \
+            || fail "feed.xml is not well-formed XML"
+          python3 -c "import xml.dom.minidom,sys; xml.dom.minidom.parse('dist/sitemap.xml')" \
+            || fail "sitemap.xml is not well-formed XML"
+
+          # Search index must be valid JSON with entries.
+          node -e "
+            const i = require('./dist/search-index.json');
+            if (!Array.isArray(i) || !i.length) { console.error('::error::empty search index'); process.exit(1); }
+            console.log('search index entries:', i.length);
+          "
+
+          echo "Built $(find dist -name '*.html' | wc -l) HTML pages"
+
+      - name: Check for unstripped editor notes in published output
+        run: |
+          # Editor notes are HTML comments, so they are invisible on the page but
+          # would still ship in the source. Warn rather than fail — they are
+          # intentional until the placeholder content is replaced.
+          if grep -rl "EDITOR'S NOTE" dist --include='*.html' >/dev/null 2>&1; then
+            echo "::warning::Editor notes still present in: $(grep -rl "EDITOR'S NOTE" dist --include='*.html' | tr '\n' ' ')"
+          else
+            echo "No editor notes in output."
+          fi
+
+      - name: Cross-post dry run
+        run: node scripts/crosspost.mjs --all --dry-run

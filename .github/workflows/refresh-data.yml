@@ -1,0 +1,42 @@
+name: Refresh integration data
+
+# Keeps subscriber counts, supporter walls, video grid and repo stars current
+# without needing a content change. Re-runs the deploy workflow on a schedule.
+#
+# Note this deliberately does NOT commit the fetched data. Patreon and Buy Me a
+# Coffee responses contain real supporters' names, and this repository is
+# public — the data is fetched fresh inside the build and only ever exists in
+# the deployed output.
+
+on:
+  schedule:
+    # Twice a day, at a minute chosen to avoid the top-of-hour rush.
+    #
+    # Each firing triggers a full deploy build, so this costs Actions minutes.
+    # PRIVATE repos draw on a limited monthly allowance; PUBLIC repos get
+    # standard runners free with no minute cap. If this repo is public, '17
+    # */6 * * *' (four times a day) is perfectly affordable.
+    - cron: '17 4,16 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Trigger a fresh build and deploy
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          curl -sS -X POST \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/workflows/deploy.yml/dispatches" \
+            -d '{"ref":"main"}'
+          echo "Deploy workflow dispatched."

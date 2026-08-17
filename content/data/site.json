@@ -1,0 +1,47 @@
+{
+  "_comment": "Safe-to-commit defaults. Any value here can be overridden by the matching environment variable / GitHub Secret — see README.md. Never put tokens in this file.",
+
+  "siteName": "TheRevProGamers",
+  "siteTagline": "Games, gear, and things I build.",
+  "siteDescription": "Tech reviews, project write-ups, build guides and videos from TheRevProGamers.",
+  "siteUrl": "https://therevprogamers.com",
+
+  "authorName": "Varun SV",
+  "authorBio": "I build things, break hardware on purpose, and write down what I learned. Videos on YouTube, code on GitHub, long-form here.",
+  "authorAvatar": "",
+  "contactEmail": "",
+
+  "social": {
+    "youtubeHandle": "@therevprogamers",
+    "youtubeChannelId": "",
+    "patreonUrl": "https://www.patreon.com/cw/VarunSV",
+    "bmcUrl": "https://buymeacoffee.com/varunsv",
+    "bmcUsername": "varunsv",
+    "githubUsername": "Varun-SV",
+    "twitterHandle": "",
+    "instagramHandle": "",
+    "discordInvite": ""
+  },
+
+  "affiliate": {
+    "amazonTag": "",
+    "disclosure": "Some links on this page are affiliate links. If you buy through them I may earn a small commission at no extra cost to you. It never changes what I recommend — if something is bad, I say so."
+  },
+
+  "privacy": {
+    "showSupporterNames": true,
+    "showSupporterMessages": true,
+    "supporterLimit": 60
+  },
+
+  "nav": [
+    { "label": "Home", "href": "/" },
+    { "label": "Blog", "href": "/blog/" },
+    { "label": "Reviews", "href": "/reviews/" },
+    { "label": "Projects", "href": "/projects/" },
+    { "label": "Videos", "href": "/videos/" },
+    { "label": "Gear", "href": "/gear/" },
+    { "label": "Support", "href": "/support/" },
+    { "label": "About", "href": "/about/" }
+  ]
+}
