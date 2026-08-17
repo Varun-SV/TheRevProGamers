@@ -4,15 +4,27 @@ date: 2026-07-19
 description: "The full working setup — what earned its place, what I'd replace tomorrow, and the two things I spent too much on so you don't have to."
 tags: [gear, desk, setup, hardware]
 type: post
-gear: [main-keyboard, main-mouse, capture-mic, monitor-main, headphones, ssd-external]
+draft: true
+gear: [nikon-d3400, dji-action-6, dji-mic-mini, sennheiser-hd560s, bose-soundlink-flex-2]
 author: Varun SV
 ---
 
-<!-- EDITOR'S NOTE (delete before publishing): item names, prices and links come
-     from content/data/gear.json — edit that file, not this post, and the cards
-     below update themselves. Swap the PLACEHOLDER Amazon URLs for real ones and
-     set AMAZON_ASSOCIATE_TAG in your repository secrets; the tag gets appended
-     to every amazon.* link automatically at build time. -->
+<!-- ═══════════════════════════════════════════════════════════════════
+     EDITOR'S NOTE — delete before publishing.
+
+     SET TO DRAFT because the body below still describes the placeholder
+     desk setup (keyboard/mouse/monitor/SSD) from the original scaffold,
+     while content/data/gear.json now holds your REAL kit — cameras,
+     the speaker collection, IEMs, phones.
+
+     TO PUBLISH, either:
+       (a) rewrite the body around your actual gear, or
+       (b) add your desk items (keyboard, mouse, monitor, storage) to
+           gear.json and keep this post roughly as-is.
+
+     Item names, prices and links come from gear.json — edit that file,
+     not this post, and the cards update themselves.
+     ═══════════════════════════════════════════════════════════════════ -->
 
 "What's your setup?" is the most common question I get and the one I'm worst at answering, because the honest answer is that it accumulated over six years and about a third of it is there by accident rather than decision.
 

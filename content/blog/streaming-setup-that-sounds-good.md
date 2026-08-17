@@ -4,7 +4,7 @@ date: 2026-07-28
 description: "The upgrade order almost every new streamer gets backwards, and why a 720p stream that sounds good beats a 4K one that doesn't."
 tags: [guides, streaming, audio, youtube]
 type: guide
-gear: [capture-mic, headphones]
+gear: [dji-mic-mini, sennheiser-hd560s]
 author: Varun SV
 ---
 

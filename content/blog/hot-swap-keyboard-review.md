@@ -4,10 +4,11 @@ date: 2026-08-04
 description: "Gasket mount, hot-swap sockets, and a knob I mocked before I owned one. Four months and roughly a million keystrokes later, here's what actually holds up."
 tags: [hardware, keyboards, review, desk]
 type: review
+draft: true
 rating: 8.5
 productName: "75% Hot-swap Mechanical Keyboard"
 productUrl: https://www.amazon.com/dp/PLACEHOLDER-KEYBOARD
-gear: [main-keyboard]
+gear: []
 verdict: >
   The last keyboard I needed to buy, which is an annoying thing to admit
   after four years of insisting the previous one was.
