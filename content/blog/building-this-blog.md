@@ -52,7 +52,7 @@ repo: https://github.com/Varun-SV/TheRevProGamers
 
 ### The data layer is where it gets interesting
 
-Four integrations — YouTube, GitHub, Patreon and Buy Me a Coffee — run on a schedule in CI, with their tokens held as encrypted repository secrets. They write JSON into a directory the build reads.
+Three integrations — YouTube, GitHub and Patreon — run on a schedule in CI, with their tokens held as encrypted repository secrets. They write JSON into a directory the build reads.
 
 The important detail is the fallback chain:
 
@@ -69,7 +69,7 @@ export function loadDataset(name, emptyShape = {}) {
 }
 ```
 
-This is the piece I'd recommend stealing regardless of what you're building. It means **a missing token is never a build failure.** Clone the repo with no secrets configured at all and you still get a complete site — the supporter wall shows sample tiers, the video grid shows placeholders, and each one carries a small "Sample" badge naming the secret that would replace it. A broken Patreon token degrades one section instead of taking down a deploy at midnight.
+This is the piece I'd recommend stealing regardless of what you're building. It means **a missing token is never a build failure.** Clone the repo with no secrets configured at all and you still get a complete site — the support page shows sample tiers, the video grid shows placeholders, and each one carries a small "Sample" badge naming the secret that would replace it. A broken Patreon token degrades one section instead of taking down a deploy at midnight.
 
 ## The two things that didn't work
 
@@ -82,6 +82,8 @@ The original goal was: push a post to Git, and it appears on Patreon and Buy Me 
 **Buy Me a Coffee's API is three GET endpoints:** supporters, subscriptions, extras. There is no write side at all.
 
 Zapier doesn't rescue you either — both platforms are trigger-only there, so you can react to a new patron but you cannot create a post.
+
+There's a footnote to the Buy Me a Coffee half of this. I never got to use their read API either: the token portal at `developers.buymeacoffee.com` returns a 400, and their developer surface appears to be mid-migration to `studio.buymeacoffee.com`. Their webhooks do work — but webhooks only fire for events *after* you register the endpoint, so they can't backfill the supporters you already have, which is precisely what a supporters wall needs. Rather than ship a wall that launched empty and filled up one coffee at a time, I cut it. The support page keeps the buttons and drops the leaderboard, which is probably the better page anyway.
 
 So the honest version is semi-automatic. On publish, CI generates the post in each platform's flavour of formatting and opens a GitHub issue containing the ready-to-paste text and a direct link to each platform's composer. Pasting takes about fifteen seconds per platform. Everything that *does* have a write API — Discord, Telegram, Mastodon, Dev.to — is genuinely automatic.
 

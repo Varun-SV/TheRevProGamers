@@ -1,12 +1,10 @@
 name: Refresh integration data
 
-# Keeps subscriber counts, supporter walls, video grid and repo stars current
+# Keeps subscriber counts, patron counts, the video grid and repo stars current
 # without needing a content change. Re-runs the deploy workflow on a schedule.
 #
-# Note this deliberately does NOT commit the fetched data. Patreon and Buy Me a
-# Coffee responses contain real supporters' names, and this repository is
-# public — the data is fetched fresh inside the build and only ever exists in
-# the deployed output.
+# Note this deliberately does NOT commit the fetched data: it is regenerated
+# fresh inside each build and only ever exists in the deployed output.
 
 on:
   schedule:

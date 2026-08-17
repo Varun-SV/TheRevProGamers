@@ -199,7 +199,6 @@ async function build() {
       repos: data.github.repos || [],
       gear,
       patreon: data.patreon,
-      bmc: data.bmc,
       youtube: data.youtube,
       github: data.github,
     })
@@ -261,7 +260,7 @@ async function build() {
   writePage('/videos/', T.videosPage(data.youtube));
   writePage('/projects/', T.projectsPage(data.github));
   writePage('/gear/', T.gearPage(gear));
-  writePage('/support/', T.supportPage({ patreon: data.patreon, bmc: data.bmc }));
+  writePage('/support/', T.supportPage({ patreon: data.patreon }));
   writePage(
     '/about/',
     T.aboutPage({
@@ -374,7 +373,6 @@ async function build() {
         dataSources: {
           youtube: data.youtube._source,
           patreon: data.patreon._source,
-          bmc: data.bmc._source,
           github: data.github._source,
         },
         integrationsEnabled: enabled,
@@ -393,12 +391,10 @@ async function build() {
   console.log(`  Repos        ${(data.github.repos || []).length} (${data.github._source})`);
   console.log(`  Gear         ${gear.length}`);
   console.log(`  Patreon      ${(data.patreon.tiers || []).length} tiers (${data.patreon._source})`);
-  console.log(`  BMC          ${(data.bmc.supporters || []).length} supporters (${data.bmc._source})`);
 
   const fallbacks = Object.entries({
     youtube: data.youtube._source,
     patreon: data.patreon._source,
-    bmc: data.bmc._source,
     github: data.github._source,
   }).filter(([, src]) => src !== 'generated');
 

@@ -27,7 +27,7 @@ This site exists because video is a bad archive. A number mentioned in minute fo
 
 ## How the site works
 
-Everything you're reading is a Markdown file in a [public Git repository](https://github.com/Varun-SV/TheRevProGamers). No CMS, no database. A build script turns the files into static HTML, and the video grid, project list and supporter walls pull themselves from the YouTube, GitHub, Patreon and Buy Me a Coffee APIs on a schedule — so nothing here is a number I typed once and forgot to update.
+Everything you're reading is a Markdown file in a [public Git repository](https://github.com/Varun-SV/TheRevProGamers). No CMS, no database. A build script turns the files into static HTML, and the video grid, project list and Patreon tiers pull themselves from the YouTube, GitHub and Patreon APIs on a schedule — so nothing here is a number I typed once and forgot to update.
 
 If you want the full architecture, including the two things that didn't work, [I wrote it up](/blog/building-this-blog/).
 

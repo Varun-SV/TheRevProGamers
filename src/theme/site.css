@@ -1175,43 +1175,6 @@ a.tag:hover { border-color: var(--gold); color: var(--gold); background: var(--p
 .tier-price small { font-size: .8rem; color: var(--paper-faint); font-weight: 400; letter-spacing: .1em; }
 .tier-desc { font-size: .92rem; color: var(--paper-dim); flex: 1; line-height: 1.6; }
 
-.supporter-wall { display: flex; flex-wrap: wrap; gap: 9px; }
-.supporter {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 7px 13px;
-  border: 1px solid var(--rule);
-  border-radius: 100px;
-  background: var(--panel);
-  font-size: .87rem;
-  color: var(--paper-dim);
-  transition: all .25s var(--ease);
-}
-.supporter:hover { border-color: var(--gold); color: var(--paper); transform: translateY(-2px); }
-.supporter img { width: 22px; height: 22px; border-radius: 50%; object-fit: cover; }
-.supporter-coffee { color: var(--gold); font-family: var(--f-mono); font-size: .74rem; }
-
-.supporter-note {
-  padding: 16px 18px;
-  border: 1px solid var(--rule);
-  border-radius: var(--r);
-  background: var(--panel);
-  font-size: .93rem;
-  color: var(--paper-dim);
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.supporter-note-head {
-  font-family: var(--f-mono);
-  font-size: .68rem;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  color: var(--gold);
-}
-.supporter-note q { font-style: italic; line-height: 1.55; }
-
 .support-split {
   display: grid;
   grid-template-columns: 1fr 1fr;

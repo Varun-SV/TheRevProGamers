@@ -46,6 +46,5 @@ export function writeDataset(name, payload) {
 export const loadAllData = () => ({
   youtube: loadDataset('youtube', { videos: [], channel: {}, ok: false }),
   patreon: loadDataset('patreon', { tiers: [], patrons: [], ok: false }),
-  bmc: loadDataset('bmc', { supporters: [], members: [], extras: [], totals: {}, ok: false }),
   github: loadDataset('github', { repos: [], totals: {}, ok: false }),
 });

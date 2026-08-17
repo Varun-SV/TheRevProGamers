@@ -13,7 +13,6 @@ import { config, enabled } from '../src/lib/config.mjs';
 import { writeDataset } from '../src/lib/data.mjs';
 import { fetchYouTube } from '../src/integrations/youtube.mjs';
 import { fetchPatreon } from '../src/integrations/patreon.mjs';
-import { fetchBuyMeACoffee } from '../src/integrations/buymeacoffee.mjs';
 import { fetchGitHub } from '../src/integrations/github.mjs';
 
 const PINNED_REPOS = (process.env.PINNED_REPOS || '')
@@ -54,13 +53,12 @@ async function main() {
     run('youtube', 'YouTube', () => fetchYouTube({ limit: 12 })),
     run('github', 'GitHub projects', () => fetchGitHub({ limit: 24, pinned: PINNED_REPOS })),
     run('patreon', 'Patreon', () => fetchPatreon()),
-    run('bmc', 'Buy Me a Coffee', () => fetchBuyMeACoffee()),
   ]);
 
   const okCount = results.filter(Boolean).length;
-  console.log(`\n${okCount}/4 integrations returned live data.`);
+  console.log(`\n${okCount}/${results.length} integrations returned live data.`);
 
-  if (!enabled.patreon || !enabled.bmc) {
+  if (!enabled.patreon || !enabled.youtube) {
     console.log('\nTip: unset integrations fall back to content/data/fallback/*.json.');
     console.log('     See README.md for the secret names each one needs.\n');
   }

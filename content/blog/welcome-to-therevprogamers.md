@@ -35,7 +35,7 @@ I would rather be trusted than be first, so a few commitments in writing:
 
 ## How this site is built
 
-The whole thing is a folder of Markdown files in a public Git repository. There is no CMS, no database, and no admin panel — I write a `.md` file, push it, and a build turns it into the page you're reading. The supporter walls, video grid and project list pull themselves from the YouTube, Patreon, Buy Me a Coffee and GitHub APIs on a schedule, so nothing on this site is a number I typed in by hand and forgot to update.
+The whole thing is a folder of Markdown files in a public Git repository. There is no CMS, no database, and no admin panel — I write a `.md` file, push it, and a build turns it into the page you're reading. The video grid, project list and Patreon tiers pull themselves from the YouTube, GitHub and Patreon APIs on a schedule, so nothing on this site is a number I typed in by hand and forgot to update.
 
 If that sounds like something you'd want to steal, [I wrote up how it works](/blog/building-this-blog/) — including the parts that don't work, which turned out to be the interesting half.
 
