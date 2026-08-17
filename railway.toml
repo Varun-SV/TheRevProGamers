@@ -3,7 +3,12 @@ builder = "NIXPACKS"
 # Fetch live data first so the built pages carry real numbers, then build.
 # `npm run fetch` never fails the build — unset integrations fall back to
 # content/data/fallback/*.json.
-buildCommand = "npm ci && npm run fetch && npm run build"
+#
+# Do NOT add `npm ci` here. Nixpacks already runs it in its own install phase,
+# and a second one fails: `npm ci` wipes node_modules before reinstalling, but
+# Nixpacks mounts /app/node_modules/.cache as a build cache, so removing it
+# errors with `EBUSY: resource busy or locked`.
+buildCommand = "npm run fetch && npm run build"
 
 [deploy]
 startCommand = "npm start"
