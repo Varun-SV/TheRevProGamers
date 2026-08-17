@@ -223,9 +223,18 @@ counts and patron counts stay current without a content change.
 
 ### Railway
 
-`railway.toml` is already configured. Point Railway at the repo, add the same
-variables, and it runs `npm ci && npm run fetch && npm run build`, then
-`npm start`.
+`railway.toml` is already configured. Point Railway at the repo and add the
+same variables. Nixpacks runs `npm ci` in its install phase, then
+`npm run fetch && npm run build`, then `npm start`.
+
+Two things that will bite you if you change the config:
+
+- **Never put `npm ci` in `buildCommand`.** Nixpacks already ran it, and a
+  second one fails with `EBUSY: resource busy or locked, rmdir
+  '/app/node_modules/.cache'` — `npm ci` wipes `node_modules` before
+  reinstalling, and Nixpacks has that path mounted as a build cache.
+- **Never set `PORT`.** Railway injects it; the server reads it. Overriding it
+  makes the healthcheck fail.
 
 Running a server additionally enables **`/api/*`**, which serves live data
 with a 10-minute cache. The page hydrates its counters from `/api/stats` when
