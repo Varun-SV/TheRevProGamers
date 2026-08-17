@@ -1,11 +1,11 @@
 # TheRevProGamers
 
-The blog, project index, video archive, gear list and supporter hub behind
+The blog, project index, video archive and gear list behind
 [@therevprogamers](https://www.youtube.com/@therevprogamers).
 
 Posts are Markdown files. A build script turns them into static HTML. The
-video grid, project list and supporter walls pull themselves from the YouTube,
-GitHub, Patreon and Buy Me a Coffee APIs. No CMS, no database.
+video grid, project list and Patreon tiers pull themselves from the YouTube,
+GitHub and Patreon APIs. No CMS, no database.
 
 ```
 content/blog/*.md  ──┐
@@ -121,7 +121,6 @@ Settings ▸ Secrets and variables ▸ Actions
 | `BMC_URL` / `BMC_USERNAME` | `https://buymeacoffee.com/varunsv` / `varunsv` |
 | `GH_USERNAME` | `Varun-SV` |
 | `PINNED_REPOS` | `TheRevProGamers,other-repo` |
-| `SHOW_SUPPORTER_NAMES` | `true` / `false` |
 | `MASTODON_INSTANCE_URL` | `https://mastodon.social` |
 
 **Secrets** (tokens — encrypted, never printed):
@@ -130,8 +129,7 @@ Settings ▸ Secrets and variables ▸ Actions
 |---|---|---|
 | `YOUTUBE_CHANNEL_ID` | Video grid | [youtube.com/account_advanced](https://www.youtube.com/account_advanced) — starts `UC…` |
 | `YOUTUBE_API_KEY` | View counts, durations, sub count | Cloud Console → enable **YouTube Data API v3** → API key |
-| `PATREON_ACCESS_TOKEN` | Tiers + patron wall | [Register a client](https://www.patreon.com/portal/registration/register-clients) → copy *Creator's Access Token* |
-| `BMC_ACCESS_TOKEN` | Supporter wall | BMC dashboard → Settings ▸ Developers ▸ generate token |
+| `PATREON_ACCESS_TOKEN` | Patreon tiers + patron count | [Register a client](https://www.patreon.com/portal/registration/register-clients) → copy *Creator's Access Token* |
 | `GH_API_TOKEN` | Higher GitHub rate limit | Optional. Public data works unauthenticated |
 | `AMAZON_ASSOCIATE_TAG` | Affiliate links | Amazon Associates dashboard |
 | `DISCORD_WEBHOOK_URL` | Auto cross-post | Server Settings ▸ Integrations ▸ Webhooks |
@@ -164,6 +162,23 @@ Settings ▸ Secrets and variables ▸ Actions
 
 Zapier and Make don't rescue this either: both platforms are *trigger-only*
 there, so you can react to a new patron but cannot create a post.
+
+### Why there is no Buy Me a Coffee read integration
+
+There was one, and it was removed. Two reasons, in order:
+
+1. **The token portal is broken.** `developers.buymeacoffee.com` returns a
+   400, and BMC's developer surface appears to be migrating to
+   `studio.buymeacoffee.com`. No token, no read API.
+2. **Webhooks can't replace it.** BMC webhooks work and need no token, but
+   they only fire for events *after* you register the endpoint — they cannot
+   backfill existing supporters, which is exactly what a supporters wall
+   needs. A wall that launches empty is worse than no wall.
+
+So the supporters wall was cut. `BMC_URL` and `BMC_USERNAME` remain because
+the support buttons and the cross-post composer link still use them. If BMC's
+token portal comes back and you want the wall, the git history for the
+"Drop the Buy Me a Coffee read integration" commit has the whole thing.
 
 So publishing is split:
 
@@ -203,8 +218,8 @@ Settings ▸ Pages ▸ Source = **GitHub Actions**. Push to `main` and
 `deploy.yml` builds and publishes. `dist/CNAME` is generated from `SITE_URL`,
 so a custom domain needs only the DNS records.
 
-`refresh-data.yml` re-runs the deploy every six hours so subscriber counts and
-supporter walls stay current without a content change.
+`refresh-data.yml` re-runs the deploy on a schedule so subscriber counts, star
+counts and patron counts stay current without a content change.
 
 ### Railway
 
@@ -223,9 +238,8 @@ the same `dist/` works on both.
 
 **Public**, with three safeguards:
 
-1. **Generated supporter data is gitignored.** Patreon and BMC responses
-   contain real names. `content/data/generated/` never enters git history —
-   CI regenerates it inside each build.
+1. **Generated API data is gitignored.** `content/data/generated/` never
+   enters git history — CI regenerates it inside each build.
 2. **Secrets are safe.** They're encrypted, and GitHub deliberately does not
    pass them to workflows triggered by forked pull requests.
 3. **Drafts are the one real leak.** A `draft: true` post isn't rendered, but

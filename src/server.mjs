@@ -8,7 +8,7 @@
  * The site is perfectly happy as pure static files, so this is strictly
  * additive. What running a server buys you:
  *
- *   · /api/* returns live supporter/video/repo data without a rebuild, so
+ *   · /api/* returns live video/repo/patron data without a rebuild, so
  *     a new patron shows up in minutes rather than at the next scheduled
  *     build. The client hydrates [data-live] elements from /api/stats and
  *     silently keeps the build-time numbers if there is no server.
@@ -24,7 +24,6 @@ import { execFileSync } from 'node:child_process';
 import { config, enabled, ROOT } from './lib/config.mjs';
 import { fetchYouTube } from './integrations/youtube.mjs';
 import { fetchPatreon } from './integrations/patreon.mjs';
-import { fetchBuyMeACoffee } from './integrations/buymeacoffee.mjs';
 import { fetchGitHub } from './integrations/github.mjs';
 import { loadAllData } from './lib/data.mjs';
 
@@ -77,15 +76,13 @@ api.get('/health', (_req, res) =>
 api.get('/youtube', async (_req, res) => res.json(await cached('youtube', () => fetchYouTube({ limit: 12 }))));
 api.get('/github', async (_req, res) => res.json(await cached('github', () => fetchGitHub({ limit: 24 }))));
 api.get('/patreon', async (_req, res) => res.json(await cached('patreon', () => fetchPatreon())));
-api.get('/bmc', async (_req, res) => res.json(await cached('bmc', () => fetchBuyMeACoffee())));
 
 /** Aggregated counters — this is what the client hydrates [data-live] from. */
 api.get('/stats', async (_req, res) => {
-  const [youtube, github, patreon, bmc] = await Promise.all([
+  const [youtube, github, patreon] = await Promise.all([
     cached('youtube', () => fetchYouTube({ limit: 1 })),
     cached('github', () => fetchGitHub({ limit: 100 })),
     cached('patreon', () => fetchPatreon()),
-    cached('bmc', () => fetchBuyMeACoffee()),
   ]);
 
   // Fall back to whatever the build baked in when an integration is unset.
@@ -101,7 +98,6 @@ api.get('/stats', async (_req, res) => {
       repos: github.totals?.repos ?? null,
     },
     patreon: { patrons: patreon.patronCount ?? null },
-    bmc: { coffees: bmc.totals?.coffees ?? null, supporters: bmc.totals?.supporters ?? null },
     generatedAt: new Date().toISOString(),
   });
 });

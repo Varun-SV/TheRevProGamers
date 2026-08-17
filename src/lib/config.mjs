@@ -76,7 +76,6 @@ export const config = {
   youtubeApiKey: val('YOUTUBE_API_KEY'),
   patreonAccessToken: val('PATREON_ACCESS_TOKEN'),
   patreonCampaignId: val('PATREON_CAMPAIGN_ID'),
-  bmcAccessToken: val('BMC_ACCESS_TOKEN'),
   githubToken: val('GH_API_TOKEN') || val('GITHUB_TOKEN'),
 
   // ── Affiliate ──────────────────────────────────────────────────────
@@ -94,15 +93,6 @@ export const config = {
   mastodonInstanceUrl: val('MASTODON_INSTANCE_URL').replace(/\/+$/, ''),
   mastodonAccessToken: val('MASTODON_ACCESS_TOKEN'),
   devtoApiKey: val('DEVTO_API_KEY'),
-
-  // ── Behaviour switches ─────────────────────────────────────────────
-  /** Show supporter display names on the public supporters wall. */
-  showSupporterNames: val('SHOW_SUPPORTER_NAMES', 'privacy.showSupporterNames', 'true') !== 'false',
-  /** Show the message a supporter left with their tip. */
-  showSupporterMessages:
-    val('SHOW_SUPPORTER_MESSAGES', 'privacy.showSupporterMessages', 'true') !== 'false',
-  /** Max supporters rendered on the wall. */
-  supporterLimit: Number(val('SUPPORTER_LIMIT', 'privacy.supporterLimit', '60')) || 60,
 };
 
 /** Which integrations have the credentials they need. */
@@ -110,7 +100,6 @@ export const enabled = {
   youtube: has(config.youtubeChannelId) || has(config.youtubeApiKey),
   youtubeRich: has(config.youtubeApiKey),
   patreon: has(config.patreonAccessToken),
-  bmc: has(config.bmcAccessToken),
   github: has(config.githubUsername),
   discord: has(config.discordWebhookUrl),
   telegram: has(config.telegramBotToken) && has(config.telegramChatId),

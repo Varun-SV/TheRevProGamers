@@ -333,7 +333,7 @@ function emptyState(title, body) {
 
 /* ── Pages ─────────────────────────────────────────────────────────── */
 
-export function homePage({ posts, videos, repos, gear, patreon, bmc, youtube, github }) {
+export function homePage({ posts, videos, repos, gear, patreon, youtube, github }) {
   const featured = posts.find((p) => p.featured) || posts[0];
   const rest = posts.filter((p) => p !== featured).slice(0, 4);
 
@@ -343,7 +343,6 @@ export function homePage({ posts, videos, repos, gear, patreon, bmc, youtube, gi
     },
     { label: 'Posts', value: posts.length },
     github?.totals?.stars ? { label: 'Stars', value: github.totals.stars, live: 'github.stars' } : null,
-    bmc?.totals?.coffees ? { label: 'Coffees', value: bmc.totals.coffees, live: 'bmc.coffees' } : null,
     patreon?.patronCount ? { label: 'Patrons', value: patreon.patronCount, live: 'patreon.patrons' } : null,
   ].filter(Boolean);
 
@@ -795,13 +794,8 @@ export function gearPage(gear) {
   );
 }
 
-export function supportPage({ patreon, bmc }) {
+export function supportPage({ patreon }) {
   const tiers = patreon.tiers || [];
-  const patrons = patreon.patrons || [];
-  const supporters = bmc.supporters || [];
-  const members = bmc.members || [];
-
-  const notes = supporters.filter((s) => s.message).slice(0, 6);
 
   const body = `
 <section class="hero">
@@ -823,7 +817,7 @@ export function supportPage({ patreon, bmc }) {
       <div class="platform-card">
         <h3>${icons.coffee} Buy Me a Coffee</h3>
         <p>One-off, no subscription, no account needed. The simplest way to say a post was worth your time.</p>
-        <a class="btn btn-primary" href="${esc(bmc.url || config.bmcUrl)}" target="_blank" rel="noopener">Buy a coffee ${icons.external}</a>
+        <a class="btn btn-primary" href="${esc(config.bmcUrl)}" target="_blank" rel="noopener">Buy a coffee ${icons.external}</a>
       </div>
     </div>
   </div>
@@ -854,53 +848,9 @@ ${
 }
 
 ${
-  patrons.length || supporters.length || members.length
-    ? `<section class="section">
-  <div class="wrap">
-    <div class="section-head"><h2 class="section-title">The wall</h2></div>
-    <p class="hero-lede" style="margin-bottom:24px">Everyone currently keeping this going. Thank you, genuinely.</p>
-    <div class="supporter-wall">
-      ${[...patrons, ...members, ...supporters]
-        .slice(0, config.supporterLimit)
-        .map(
-          (s) => `<span class="supporter">
-        ${s.avatar ? `<img src="${esc(s.avatar)}" alt="" loading="lazy">` : ''}
-        ${esc(s.name)}
-        ${s.tier ? `<span class="supporter-coffee">${esc(s.tier)}</span>` : ''}
-        ${s.coffees ? `<span class="supporter-coffee">×${s.coffees}</span>` : ''}
-      </span>`
-        )
-        .join('\n      ')}
-    </div>
-  </div>
-</section>`
-    : ''
-}
-
-${
-  notes.length
-    ? `<section class="section">
-  <div class="wrap">
-    <div class="section-head"><h2 class="section-title">Things people said</h2></div>
-    <div class="grid grid-3">
-      ${notes
-        .map(
-          (n) => `<div class="supporter-note reveal">
-        <div class="supporter-note-head">${esc(n.name)}</div>
-        <q>${esc(n.message)}</q>
-      </div>`
-        )
-        .join('\n      ')}
-    </div>
-  </div>
-</section>`
-    : ''
-}
-
-${
-  patreon.sample || bmc.sample
+  patreon.sample
     ? `<section class="section"><div class="wrap">
-  <div class="callout">${icons.clock}<span><strong>Some of this is sample data.</strong> Add <code>PATREON_ACCESS_TOKEN</code> and <code>BMC_ACCESS_TOKEN</code> to your repository secrets to show real tiers and supporters. See the README for how to generate each one.</span></div>
+  <div class="callout">${icons.clock}<span><strong>These tiers are sample data.</strong> Add <code>PATREON_ACCESS_TOKEN</code> to your repository secrets to show your real tiers. See the README for how to generate one.</span></div>
 </div></section>`
     : ''
 }`;
