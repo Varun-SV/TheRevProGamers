@@ -67,7 +67,7 @@ function masthead(current) {
   <div class="wrap masthead-top">
     <a class="brand" href="/">
       <span class="brand-mark">${esc(initials(config.siteName))}</span>
-      <span>
+      <span class="brand-text">
         <span class="brand-name">${esc(config.siteName)}</span>
         <span class="brand-tag">${esc(config.siteTagline)}</span>
       </span>
