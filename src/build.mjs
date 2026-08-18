@@ -112,6 +112,12 @@ function svgPlaceholders() {
     monitor: ['Monitor', '🖥️'],
     headphones: ['Headphones', '🎧'],
     ssd: ['Storage', '💾'],
+    camera: ['Camera', '📷'],
+    speaker: ['Speaker', '🔊'],
+    iem: ['IEM', '🎧'],
+    dac: ['DAC', '🎛️'],
+    phone: ['Phone', '📱'],
+    tablet: ['Tablet', '📲'],
     placeholder: ['Gear', '📦'],
   };
   for (const [name, [label, glyph]] of Object.entries(gearArt)) {
