@@ -90,6 +90,10 @@ html {
   scroll-behavior: smooth;
   scroll-padding-top: 92px;
   -webkit-text-size-adjust: 100%;
+  /* Belt and braces with body: a position:sticky descendant can escape
+     clipping applied only to body, which is how the masthead used to
+     leak 234px of horizontal scroll on phones. */
+  overflow-x: clip;
 }
 
 body {
@@ -185,7 +189,10 @@ body::after {
 
 .skip-link {
   position: absolute;
-  left: -9999px;
+  /* Clipped rather than pushed to -9999px, which shows up as a real
+     out-of-flow box in layout audits. */
+  clip-path: inset(50%);
+  left: 0;
   top: 0;
   z-index: 999;
   background: var(--gold);
@@ -195,7 +202,7 @@ body::after {
   font-size: .8rem;
   font-weight: 600;
 }
-.skip-link:focus { left: 12px; top: 12px; }
+.skip-link:focus { clip-path: none; left: 12px; top: 12px; }
 
 .sr-only {
   position: absolute; width: 1px; height: 1px;
@@ -221,7 +228,18 @@ body::after {
   height: 68px;
 }
 
-.brand { display: flex; align-items: center; gap: 12px; flex: 0 0 auto; }
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  /* Must be shrinkable. With flex:0 0 auto the long tagline forced the
+     masthead wider than the viewport and pushed the actions off-screen. */
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* min-width:0 lets the ellipsis actually engage inside a flex item */
+.brand-text { min-width: 0; overflow: hidden; }
 
 .brand-mark {
   width: 38px; height: 38px;
@@ -250,6 +268,10 @@ body::after {
   letter-spacing: -.02em;
   line-height: 1;
   color: var(--paper);
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .brand-tag {
   font-family: var(--f-mono);
@@ -258,9 +280,19 @@ body::after {
   text-transform: uppercase;
   color: var(--paper-faint);
   margin-top: 3px;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.masthead-actions { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+.masthead-actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 0 0 auto;   /* never squash the controls */
+}
 
 .icon-btn {
   width: 38px; height: 38px;
@@ -351,6 +383,10 @@ body::after {
 .nav-toggle { display: none; }
 
 @media (max-width: 860px) {
+  /* The tagline is decorative and is the single widest thing in the
+     masthead — drop it before anything important gets squeezed. */
+  .brand-tag { display: none; }
+  .masthead-top { gap: 12px; }
   .search-trigger { min-width: 0; padding: 0 11px; }
   .search-trigger span, .search-trigger kbd { display: none; }
   .nav-toggle { display: grid; }
@@ -364,6 +400,31 @@ body::after {
   .nav-list { flex-direction: column; padding-block: 6px; }
   .nav-link { padding: 13px 4px; font-size: .78rem; }
   .nav-link::after { left: 4px; right: 4px; }
+}
+
+/* Small phones: tighten the chrome so the site name never truncates.
+   At 390px the three controls + padding leave ~142px for the wordmark,
+   which 1.32rem Playfair does not fit into. */
+@media (max-width: 480px) {
+  .wrap { padding-inline: 18px; }
+  .masthead-top { height: 60px; gap: 10px; }
+  .brand { gap: 10px; }
+  .brand-mark { width: 34px; height: 34px; font-size: .74rem; }
+  .brand-name { font-size: 1.08rem; }
+  .icon-btn { width: 34px; height: 34px; }
+  .search-trigger { height: 34px; padding: 0 9px; }
+  .nav-link { padding: 12px 2px; }
+  .nav-link::after { left: 2px; right: 2px; }
+}
+
+/* Very small phones (320px, e.g. SE gen 1). One more step down so the
+   wordmark still fits whole rather than ellipsising. */
+@media (max-width: 360px) {
+  .wrap { padding-inline: 14px; }
+  .masthead-top { gap: 8px; }
+  .brand { gap: 8px; }
+  .brand-mark { width: 30px; height: 30px; font-size: .68rem; }
+  .brand-name { font-size: .95rem; }
 }
 
 /* ── SCOREBOARD TICKER ──────────────────────────────────────────────── */
