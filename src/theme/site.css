@@ -310,7 +310,7 @@ body::after {
   background: var(--panel-2);
   transform: translateY(-1px);
 }
-.icon-btn svg { width: 17px; height: 17px; stroke: currentColor; fill: none; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+.icon-btn svg { width: 17px; height: 17px; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
 
 .search-trigger {
   display: flex; align-items: center; gap: 10px;
@@ -570,7 +570,7 @@ body::after {
   transform: translateY(-2px);
   box-shadow: var(--shadow-2);
 }
-.btn svg { width: 15px; height: 15px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.btn svg { width: 15px; height: 15px; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
 .btn-primary {
   background: var(--gold);
@@ -1017,6 +1017,7 @@ a.tag:hover { border-color: var(--gold); color: var(--gold); background: var(--p
   font-size: .95rem;
   color: var(--paper-dim);
 }
+.callout svg { width: 18px; height: 18px; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex: 0 0 auto; }
 .callout strong { color: var(--paper); }
 .callout-disclosure { border-left-color: var(--crimson); font-size: .85rem; }
 
@@ -1252,7 +1253,8 @@ a.tag:hover { border-color: var(--gold); color: var(--gold); background: var(--p
   flex-direction: column;
   gap: 14px;
 }
-.platform-card h3 { font-family: var(--f-display); font-size: 1.7rem; font-weight: 800; }
+.platform-card h3 { display: flex; align-items: center; gap: 10px; font-family: var(--f-display); font-size: 1.7rem; font-weight: 800; }
+.platform-card h3 svg { width: 26px; height: 26px; flex: 0 0 auto; }
 .platform-card p { color: var(--paper-dim); font-size: .95rem; flex: 1; }
 
 /* ── EMPTY / NOTICE STATES ──────────────────────────────────────────── */
@@ -1452,7 +1454,7 @@ a.tag:hover { border-color: var(--gold); color: var(--gold); background: var(--p
   transition: all .25s var(--ease);
 }
 .footer-social a:hover { color: var(--gold); border-color: var(--gold); transform: translateY(-2px); }
-.footer-social svg { width: 16px; height: 16px; fill: currentColor; }
+.footer-social svg { width: 16px; height: 16px; }
 
 /* ── ENTRANCE ANIMATION ─────────────────────────────────────────────── */
 @media (prefers-reduced-motion: no-preference) {
