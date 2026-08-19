@@ -174,9 +174,9 @@
     },
     {
       "id": "tribit-stormbox-mini",
-      "name": "Tribit StormBox Mini",
+      "name": "Tribit StormBox Mini+",
       "category": "Audio — Speakers",
-      "blurb": "Pocketable Tribit.",
+      "blurb": "Pocketable Tribit. (Name corrected from \"Mini\" — Tribit's current lineup only has \"Mini+\"; confirm against the unit.)",
       "why": "",
       "image": "/assets/gear/speaker.svg",
       "url": "",
@@ -198,9 +198,9 @@
     },
     {
       "id": "tribit-pocket-go",
-      "name": "Tribit Pocket Go",
+      "name": "Tribit XSound Go",
       "category": "Audio — Speakers",
-      "blurb": "The smallest Tribit here.",
+      "blurb": "The smallest Tribit here. (Name corrected — \"Pocket Go\" isn't a real Tribit product; closest match is the XSound Go, confirm against the unit.)",
       "why": "",
       "image": "/assets/gear/speaker.svg",
       "url": "",

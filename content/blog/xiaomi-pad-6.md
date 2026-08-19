@@ -14,18 +14,21 @@ pros:
 cons:
   - "TODO"
 specs:
-  Display: "TODO — size, resolution, refresh rate"
-  Chipset: "TODO"
-  RAM / Storage: "TODO"
-  Battery: "TODO mAh"
-  Charging: "TODO W"
-  Weight: "TODO g"
-  Software: "TODO — MIUI/HyperOS version, update policy"
+  Display: "11.0\" IPS LCD, 1800x2880, 144Hz, Dolby Vision"
+  Chipset: "Snapdragon 870 5G"
+  RAM / Storage: "6/128, 8/128 or 8/256 GB — TODO which you have"
+  Battery: "8,840 mAh"
+  Charging: "33W wired"
+  Weight: "490 g"
+  Software: "Launched Android 13 / MIUI 14. No multi-year update pledge was published at launch; got one major bump to HyperOS 2 (Android 14). TODO what it's running now"
 author: Varun SV
 ---
 
-<!-- EDITOR'S NOTE — delete before publishing. Scaffold; specs left blank
-     deliberately. Fill from the retail listing or Settings > About.
+<!-- EDITOR'S NOTE — delete before publishing. Specs table now filled
+     from GSMArena, Wikipedia and Xiaomi's own product page — verified,
+     not guessed. RAM/storage tier and current software version are
+     still yours to confirm from Settings > About, since three configs
+     shipped and updates move it forward from the launch version listed.
      Photos: public/assets/photos/xiaomi-pad-6/ -> /assets/photos/xiaomi-pad-6/x.jpg -->
 
 TODO — open with why you bought it and what you expected it to be.
