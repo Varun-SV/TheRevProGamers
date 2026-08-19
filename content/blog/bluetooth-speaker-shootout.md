@@ -1,7 +1,7 @@
 ---
 title: "Eleven Bluetooth speakers, one desk: the shootout"
 date: 2026-08-17
-description: "Bose, four StormBoxes, two JBLs, two Mivis and a Pocket Go — bought over years, tested against each other in one sitting. Which ones actually justify their price."
+description: "Bose, four StormBoxes, two JBLs, two Mivis and a PocketGo — bought over years, tested against each other in one sitting. Which ones actually justify their price."
 tags: [reviews, audio, bluetooth, speakers, shootout]
 type: review
 draft: true
@@ -18,19 +18,22 @@ author: Varun SV
 <!-- ═══════════════════════════════════════════════════════════════════
      EDITOR'S NOTE — delete this block before publishing.
 
-     The table below is now filled from manufacturer spec pages and
-     retailer/review corroboration — verified, not guessed. Two rows
-     need YOUR confirmation, not mine, because the names as given don't
-     match a real Tribit SKU:
+     CORRECTION: the first research pass wrongly claimed "StormBox Mini"
+     and "Pocket Go" weren't real Tribit products. They are — both are
+     live on tribit.com right now, the original search agent just missed
+     them. Confirmed directly against tribit.com and in.tribit.com
+     listings. Correct spelling is "PocketGo" (one word). Apologies for
+     the false alarm in the previous pass.
 
-       - "Tribit StormBox Mini" — no plain "Mini" exists in Tribit's
-         current lineup. Closest real match is the StormBox Mini+.
-         Table below uses Mini+ specs; check yours actually says "Mini+"
-         on the unit or box.
-       - "Tribit Pocket Go" — not a Tribit product name at all. Closest
-         match is the XSound Go. Table below uses XSound Go specs as a
-         placeholder — if what you own is genuinely branded differently,
-         tell me and I'll redo that row rather than guess further.
+     StormBox Mini specs below (IPX7, BT5.4, dual 48mm 6W drivers) are
+     for the plain Mini, distinct from the StormBox Mini+ (which runs
+     12W and is a different, newer product) — sources conflate the two
+     heavily online, so cross-check battery/weight against your actual
+     box if the numbers look off; those two figures were the least
+     consistently reported for the Mini specifically.
+
+     PocketGo specs (7W, 2400mAh/20hrs@50%, IP68, BT6.0) come from a
+     clean, unambiguous set of sources and should be solid.
 
      Everything else in the table (battery, IP rating, output power,
      drivers, weight, BT version, launch year) is sourced and correct
@@ -43,7 +46,7 @@ author: Varun SV
      they sound or which one you actually reach for.
 
      TO PUBLISH:
-       1. Confirm/fix the two flagged product names above
+       1. Double-check StormBox Mini's battery/weight against your unit
        2. Fill in price paid and measured battery (rated is now filled)
        3. Write each speaker's paragraph
        4. Set `rating:` and the real pros/cons in the front matter
@@ -83,9 +86,9 @@ Everything here was bought with my own money. Nothing was sent to me.
 | Tribit StormBox Blast | TODO | 2x4.2" woofers (30W ea) + 2x1.2" tweeters (15W ea), 90W total | 30 hrs / TODO | ~5.45 kg | IPX7 | /10 |
 | Tribit StormBox Pro | TODO | 2x1.6" tweeters + down-firing 3.1" woofer + 2 passive radiators, ~40W | 24 hrs / TODO | ~975 g | IP67 | /10 |
 | Tribit StormBox Micro | TODO | Single full-range driver, 9W | 8 hrs / TODO | ~280 g | IP67 | /10 |
-| Tribit StormBox Mini+ *(confirm this matches yours)* | TODO | 2x48mm full-range + passive radiator, 12W | 12 hrs / TODO | ~550-710 g (sources vary) | IPX7 | /10 |
+| Tribit StormBox Mini | TODO | 2x48mm full-range (6W ea) + passive radiator, XBass | TODO — cross-check vs. Mini+ figures online | TODO — cross-check vs. Mini+ figures online | IPX7 | /10 |
 | Tribit MaxSound Plus | TODO | Dual drivers w/ XBass, 24W | 20 hrs / TODO | ~600 g | IPX7 | /10 |
-| Tribit XSound Go *(confirm this matches yours — no "Pocket Go" exists)* | TODO | 2x8W full-range + passive bass radiator, 16W | 24 hrs / TODO | ~380 g | IPX7 | /10 |
+| Tribit PocketGo | TODO | 7W output | 20 hrs @ 50% vol (2400mAh) / TODO | TODO | IP68 | /10 |
 | JBL Flip 6 | TODO | 44x80mm racetrack woofer + 16mm tweeter, dual passive radiators, 30W RMS | 12 hrs / TODO | ~549 g | IP67 | /10 |
 | JBL Go 4 | TODO | Single full-range driver, 4.2W RMS | 7 hrs (+2 hrs Playtime Boost) / TODO | ~190 g | IP67 | /10 |
 | Mivi Roam | TODO | Not publicly detailed | ~5-6 hrs / TODO | Not published | IPX67 | /10 |
@@ -121,17 +124,17 @@ TODO — the value pick historically. Compare directly against the Flip 6 since 
 
 TODO — the strap is the whole idea. Bike, bag, shower.
 
-### Tribit StormBox Mini+ (confirm name)
+### Tribit StormBox Mini
 
-TODO — how does it differ from the Micro in practice? If it doesn't meaningfully, say so. Confirm the box/unit actually says "Mini+" — see editor's note.
+TODO — how does it differ from the Micro in practice? If it doesn't meaningfully, say so.
 
 ### JBL Go 4
 
 TODO — smallest JBL. Genuinely useful or a keychain that plays music?
 
-### Tribit XSound Go (confirm name — "Pocket Go" isn't a real Tribit product)
+### Tribit PocketGo
 
-TODO
+TODO — real standout on paper: IP68 (dust *and* full water immersion resistance) at this size is unusual, and it floats.
 
 ### Mivi Roam / Mivi Play
 
