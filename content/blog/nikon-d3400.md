@@ -14,23 +14,24 @@ pros:
 cons:
   - "TODO"
 specs:
-  Sensor: "TODO — APS-C CMOS, MP"
-  Mount: "Nikon F"
-  ISO range: "TODO"
-  Continuous: "TODO fps"
-  Video: "TODO"
-  Weight: "TODO g body only"
-  Battery: "TODO shots CIPA"
+  Sensor: "23.5x15.6mm APS-C (DX) CMOS, 24.2 MP"
+  Mount: "Nikon F (DX)"
+  ISO range: "100-25,600"
+  Continuous: "5 fps"
+  Video: "1080p60"
+  Weight: "395 g body only (~445 g with battery + card)"
+  Battery: "1,200 shots, CIPA rating"
 author: Varun SV
 ---
 
 <!-- ═══════════════════════════════════════════════════════════════════
      EDITOR'S NOTE — delete before publishing.
 
-     Scaffold. I deliberately left the specs table as TODO rather than
-     filling it from memory — camera specs are exactly the thing readers
-     check, and a wrong number here costs the whole post its credibility.
-     Copy them off Nikon's spec sheet or the manual.
+     Specs table now filled from DPReview and Wikipedia (citing Nikon's
+     own sheet) — verified, not guessed. Note the weight has two
+     defensible numbers depending on source: 395g is Nikon's official
+     body-only figure; ~445g (seen on some aggregators) includes battery
+     and card. Both are given rather than picking one.
 
      PHOTOS: put your Instagram shots in
        public/assets/photos/nikon-d3400/

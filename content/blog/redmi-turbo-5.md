@@ -14,24 +14,32 @@ pros:
 cons:
   - "TODO"
 specs:
-  Display: "TODO"
-  Chipset: "TODO"
-  RAM / Storage: "TODO"
-  Battery: "TODO mAh"
-  Charging: "TODO W"
+  Display: "6.59\" AMOLED, ~1268x2756 (India: 3,500-nit peak, Dolby Vision/HDR10+), 120Hz"
+  Chipset: "MediaTek Dimensity 8500-Ultra"
+  RAM / Storage: "China: 12/16 GB RAM, 256/512 GB UFS 4.1. India: 8/256 or 12/256 GB — confirm which you have"
+  Battery: "China 7,560 mAh / India 7,540 mAh"
+  Charging: "100W wired (China spec also lists 27W reverse wired)"
   Cameras: "TODO"
-  Software: "TODO — version + update commitment"
+  Software: "HyperOS 3 on Android 16. India's official policy: 4 years Android upgrades + 6 years security"
 author: Varun SV
 ---
 
 <!-- EDITOR'S NOTE — delete before publishing.
 
-     Scaffold. Specs deliberately blank — this phone is recent enough
-     that I will not guess at its numbers. Fill from the retail page.
+     Specs table now filled from GSMArena, Gizmochina, 91mobiles and
+     Xiaomi's own India product/FAQ pages — verified, not guessed.
+
+     IMPORTANT — this phone has REGION-SPECIFIC specs, not one global
+     SKU: China launch was 29 Jan 2026 (12/16GB RAM, 256/512GB storage,
+     7,560mAh battery); India launch was 19 Jun 2026 with a different
+     tier (8/256 or 12/256GB, 7,540mAh). State which market yours is
+     from — the numbers genuinely differ, this isn't just
+     currency/pricing localisation.
 
      The framing below assumes the Turbo line's usual proposition
      (flagship-tier chip, compromises elsewhere). If that's wrong for
-     this generation, rewrite the angle — don't force it.
+     this generation, rewrite the angle — don't force it. Camera specs
+     were not part of this research pass; still needs filling.
 
      Photos: public/assets/photos/redmi-turbo-5/ -->
 

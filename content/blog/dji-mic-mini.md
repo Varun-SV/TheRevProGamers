@@ -14,19 +14,26 @@ pros:
 cons:
   - "TODO"
 specs:
-  Transmitter weight: "TODO g"
-  Battery (TX): "TODO hrs"
-  Battery (with case): "TODO hrs"
-  Range: "TODO m"
-  Onboard recording: "TODO"
-  Connection: "TODO"
+  Transmitter weight: "10 g"
+  Battery (TX): "11.5 hrs"
+  Battery (with case): "~48 hrs total (case adds ~3.6 charges)"
+  Range: "Up to 400 m, line of sight"
+  Onboard recording: "None — no internal storage on the transmitter"
+  Connection: "3.5mm TRS or USB-C receiver; Bluetooth pairing supported; Lightning needs the separate Mobile Receiver adapter"
 author: Varun SV
 ---
 
 <!-- ═══════════════════════════════════════════════════════════════════
      EDITOR'S NOTE — delete before publishing.
 
-     Scaffold. Specs left blank on purpose — copy from DJI's page.
+     Specs table above is filled from DJI's published numbers and
+     corroborating press coverage (CineD, Newsshooter, B&H) — verified,
+     not guessed. Receiver latency in ms is NOT published by DJI for
+     this specific model, so it's omitted rather than invented.
+
+     Everything still marked TODO below requires you to have actually
+     used the mic — I have not, and won't fabricate listening
+     impressions or day-to-day reliability notes.
 
      The strongest thing you can add here that no spec sheet provides:
      an actual audio sample. Record the same line on the Mic Mini and

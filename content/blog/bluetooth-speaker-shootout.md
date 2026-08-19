@@ -18,17 +18,37 @@ author: Varun SV
 <!-- ═══════════════════════════════════════════════════════════════════
      EDITOR'S NOTE — delete this block before publishing.
 
-     This is a scaffold. The structure, method and framing are written;
-     every verdict is yours. I have deliberately NOT invented specs,
-     prices, battery figures or scores — filling those in from memory
-     would put made-up numbers under your name.
+     The table below is now filled from manufacturer spec pages and
+     retailer/review corroboration — verified, not guessed. Two rows
+     need YOUR confirmation, not mine, because the names as given don't
+     match a real Tribit SKU:
+
+       - "Tribit StormBox Mini" — no plain "Mini" exists in Tribit's
+         current lineup. Closest real match is the StormBox Mini+.
+         Table below uses Mini+ specs; check yours actually says "Mini+"
+         on the unit or box.
+       - "Tribit Pocket Go" — not a Tribit product name at all. Closest
+         match is the XSound Go. Table below uses XSound Go specs as a
+         placeholder — if what you own is genuinely branded differently,
+         tell me and I'll redo that row rather than guess further.
+
+     Everything else in the table (battery, IP rating, output power,
+     drivers, weight, BT version, launch year) is sourced and correct
+     for the models as named. Bose's exact driver count/wattage and the
+     original Mivi Roam's weight are not published anywhere — left as
+     "not published" rather than estimated.
+
+     The verdicts, the awards, and every listening impression below
+     are yours — I have not used any of these and won't fabricate how
+     they sound or which one you actually reach for.
 
      TO PUBLISH:
-       1. Fill the comparison table (specs from the boxes/manuals)
-       2. Write each speaker's paragraph
-       3. Set `rating:` and the real pros/cons in the front matter
-       4. Fill the award section
-       5. Set `draft: true` -> `draft: false`
+       1. Confirm/fix the two flagged product names above
+       2. Fill in price paid and measured battery (rated is now filled)
+       3. Write each speaker's paragraph
+       4. Set `rating:` and the real pros/cons in the front matter
+       5. Fill the award section
+       6. Set `draft: true` -> `draft: false`
 
      PHOTOS: drop them in public/assets/photos/speakers/ and reference
      as /assets/photos/speakers/whatever.jpg
@@ -48,27 +68,28 @@ The upside of an accidental collection is that I can do something most reviews c
 - **Tracks:** TODO — name the actual test tracks and what each one is for
 - **Levels:** TODO — how you matched loudness between units
 - **Environment:** TODO — indoors, outdoors, bathroom, wherever they actually get used
-- **Battery:** TODO — at what volume, measured how
+- **Battery:** TODO — at what volume, measured how. Rated figures are now in the table from each manufacturer; real-world runtime at your actual listening volume is the number readers actually want, and it's usually lower than the rated one.
 
 Everything here was bought with my own money. Nothing was sent to me.
 
 ## The table
 
-<!-- TODO: fill from the actual units. Leave a cell blank rather than guessing. -->
+<!-- Price paid and measured battery are still yours. Rated specs below
+     are sourced — see the editor's note above on the two flagged names. -->
 
 | Speaker | Price paid | Drivers | Battery (rated / measured) | Weight | IP rating | Score |
 |---|---|---|---|---|---|---|
-| Bose SoundLink Flex Gen 2 | | | | | | /10 |
-| Tribit StormBox Blast | | | | | | /10 |
-| Tribit StormBox Pro | | | | | | /10 |
-| Tribit StormBox Micro | | | | | | /10 |
-| Tribit StormBox Mini | | | | | | /10 |
-| Tribit MaxSound Plus | | | | | | /10 |
-| Tribit Pocket Go | | | | | | /10 |
-| JBL Flip 6 | | | | | | /10 |
-| JBL Go 4 | | | | | | /10 |
-| Mivi Roam | | | | | | /10 |
-| Mivi Play | | | | | | /10 |
+| Bose SoundLink Flex Gen 2 | TODO | Not published by Bose | 12 hrs / TODO | ~586 g | IP67 | /10 |
+| Tribit StormBox Blast | TODO | 2x4.2" woofers (30W ea) + 2x1.2" tweeters (15W ea), 90W total | 30 hrs / TODO | ~5.45 kg | IPX7 | /10 |
+| Tribit StormBox Pro | TODO | 2x1.6" tweeters + down-firing 3.1" woofer + 2 passive radiators, ~40W | 24 hrs / TODO | ~975 g | IP67 | /10 |
+| Tribit StormBox Micro | TODO | Single full-range driver, 9W | 8 hrs / TODO | ~280 g | IP67 | /10 |
+| Tribit StormBox Mini+ *(confirm this matches yours)* | TODO | 2x48mm full-range + passive radiator, 12W | 12 hrs / TODO | ~550-710 g (sources vary) | IPX7 | /10 |
+| Tribit MaxSound Plus | TODO | Dual drivers w/ XBass, 24W | 20 hrs / TODO | ~600 g | IPX7 | /10 |
+| Tribit XSound Go *(confirm this matches yours — no "Pocket Go" exists)* | TODO | 2x8W full-range + passive bass radiator, 16W | 24 hrs / TODO | ~380 g | IPX7 | /10 |
+| JBL Flip 6 | TODO | 44x80mm racetrack woofer + 16mm tweeter, dual passive radiators, 30W RMS | 12 hrs / TODO | ~549 g | IP67 | /10 |
+| JBL Go 4 | TODO | Single full-range driver, 4.2W RMS | 7 hrs (+2 hrs Playtime Boost) / TODO | ~190 g | IP67 | /10 |
+| Mivi Roam | TODO | Not publicly detailed | ~5-6 hrs / TODO | Not published | IPX67 | /10 |
+| Mivi Play | TODO | Single 52mm driver, 5W (10W paired TWS) | 12 hrs / TODO | ~164 g | IPX4 *(not IPX7 — commonly assumed wrong)* | /10 |
 
 ## The big ones
 
@@ -100,15 +121,15 @@ TODO — the value pick historically. Compare directly against the Flip 6 since 
 
 TODO — the strap is the whole idea. Bike, bag, shower.
 
-### Tribit StormBox Mini
+### Tribit StormBox Mini+ (confirm name)
 
-TODO — how does it differ from the Micro in practice? If it doesn't meaningfully, say so.
+TODO — how does it differ from the Micro in practice? If it doesn't meaningfully, say so. Confirm the box/unit actually says "Mini+" — see editor's note.
 
 ### JBL Go 4
 
 TODO — smallest JBL. Genuinely useful or a keychain that plays music?
 
-### Tribit Pocket Go
+### Tribit XSound Go (confirm name — "Pocket Go" isn't a real Tribit product)
 
 TODO
 

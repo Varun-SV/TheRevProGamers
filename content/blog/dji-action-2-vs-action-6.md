@@ -1,7 +1,7 @@
 ---
-title: "DJI Action 2 vs Action 6: four years of action cams, side by side"
+title: "DJI Action 2 vs Osmo Action 6: four years of action cams, side by side"
 date: 2026-08-12
-description: "The magnetic modular one with the overheating reputation, against the current generation. Plus whether the Action 2's Power Mod and macro lens were ever worth it."
+description: "The magnetic modular one with the overheating reputation, against DJI's current Osmo Action 6. Plus whether the Action 2's Power Mod and macro lens were ever worth it."
 tags: [reviews, dji, action-camera, video, comparison]
 type: review
 draft: true
@@ -18,38 +18,46 @@ author: Varun SV
 <!-- ═══════════════════════════════════════════════════════════════════
      EDITOR'S NOTE — delete before publishing.
 
-     Scaffold. I have NOT filled in specs for either camera. The Action 6
-     in particular is recent enough that I'd risk stating wrong numbers,
-     and on a spec comparison post a wrong figure is fatal. Copy them
-     from DJI's spec pages.
+     NAMING CORRECTION: the current camera is officially the "DJI Osmo
+     Action 6," not "Action 6" — it belongs to DJI's Osmo Action line,
+     not a standalone Action line. Title/copy below updated to match.
+     It launched in China Nov 13 2025 and globally Nov 18 2025, but was
+     NOT sold through official US channels at launch (per DPReview and
+     dronedj) — worth a line if that affected how you got yours.
+
+     Specs table below is now filled from DJI's own manual, DPReview and
+     dronedj coverage — verified, not guessed. Weight for the Osmo
+     Action 6 specifically comes from third-party listings (Amazon) since
+     dji.com itself was unreachable during research; flagged in case you
+     want to double check it against the box.
 
      You noted: Action 2 WITH Power Mod and macro lens, NO display mod.
      That's an unusual and useful configuration to write about — most
-     reviews only ever tested the display mod combo.
+     reviews only ever tested the display mod combo. Everything about how
+     that combo actually performs is still yours to write — I haven't
+     used either camera.
 
      PHOTOS/CLIPS: public/assets/photos/dji/ -> /assets/photos/dji/x.jpg
      ═══════════════════════════════════════════════════════════════════ -->
 
-The Action 2 was the strangest action camera DJI has made — a magnetic cube that clipped onto modules, sold on an idea rather than a spec sheet. The Action 6 is the current, conventional, sensible one.
+The Action 2 was the strangest action camera DJI has made — a magnetic cube that clipped onto modules, sold on an idea rather than a spec sheet. The Osmo Action 6 is the current, conventional, sensible one.
 
 I own both. This is what four years of iteration actually bought.
 
 ## Side by side
 
-<!-- TODO: fill from DJI's spec pages. Blank beats guessed. -->
-
-| | Action 2 | Action 6 |
+| | Action 2 (2021) | Osmo Action 6 (2025) |
 |---|---|---|
-| Released | | |
-| Sensor | | |
-| Max resolution / fps | | |
-| Stabilisation | | |
-| Battery (standalone) | | |
-| Battery (with Power Mod) | | — |
-| Waterproof (bare) | | |
-| Screen | | |
-| Weight | | |
-| Price paid | | |
+| Released | 27 Oct 2021 | 13 Nov 2025 (China) / 18 Nov 2025 (global, not official US retail at launch) |
+| Sensor | 1/1.7" CMOS, 155° FOV | 1/1.1" square CMOS, variable f/2.0-f/4.0 aperture |
+| Max resolution / fps | 4K up to 120fps | 4K up to 120fps |
+| Stabilisation | RockSteady 2.0 + HorizonSteady | RockSteady 3.0 + HorizonSteady |
+| Battery (standalone) | 70 min at 1080p30, EIS off | ~4 hrs; 0-80% in 22 min |
+| Battery (with Power Mod) | ~180 min | — (no equivalent module) |
+| Waterproof (bare) | 10 m (IP68) | 20 m (IP68); 60 m with the waterproof case |
+| Screen | Back: 1.76" OLED touch. Front: none without the Front Touchscreen Mod | Dual OLED touch: 2.5" main + 1.46" front, both 800-nit |
+| Weight | 56 g (camera unit) | ~149 g (camera unit — third-party listing, not DJI's own page; worth confirming against your unit) |
+| Price paid | TODO | TODO |
 
 ## The Action 2's modular idea
 
@@ -79,11 +87,11 @@ TODO — worth being explicit that you never bought it, and how the camera behav
 
 ## The overheating question
 
-TODO — this is the Action 2's entire reputation and readers will come here specifically for it.
+TODO — this is the Action 2's entire reputation and readers will come here specifically for it. I haven't found a DJI-published thermal spec to anchor this against, which is itself telling — the complaints are widespread in user reports and reviews from 2021-2022, not something DJI has ever put a number on.
 
 Give real numbers if you have them: what resolution, what ambient temperature, how many minutes before it stopped. If it's fine in your use and the reputation is overblown, say that — but say what your use is.
 
-## The Action 6
+## The Osmo Action 6
 
 TODO — the modern one.
 
