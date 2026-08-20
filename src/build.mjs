@@ -201,6 +201,7 @@ async function build() {
     '/',
     T.homePage({
       posts: posts.slice(0, 5),
+      reviews: reviews.slice(0, 4),
       videos: data.youtube.videos || [],
       repos: data.github.repos || [],
       gear,
@@ -230,6 +231,7 @@ async function build() {
       intro: 'Everything I have tested properly. Scores are out of 10 and nothing here is sponsored.',
       url: '/reviews/',
       current: '/reviews/',
+      variant: 'gauges',
     })
   );
 

@@ -481,14 +481,6 @@ body::after {
   pointer-events: none;
 }
 
-.hero-grid {
-  position: relative;
-  display: grid;
-  grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
-  gap: 56px;
-  align-items: end;
-}
-
 .hero-title {
   font-family: var(--f-display);
   font-size: clamp(2.9rem, 8vw, 6rem);
@@ -525,24 +517,8 @@ body::after {
 
 .hero-cta { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
 
-/* Oversized ghost letterform anchoring the right column */
-.hero-deco {
-  font-family: var(--f-display);
-  font-size: clamp(7rem, 17vw, 15rem);
-  font-weight: 900;
-  line-height: .72;
-  letter-spacing: -.06em;
-  text-align: right;
-  color: transparent;
-  -webkit-text-stroke: 1.5px var(--rule-strong);
-  user-select: none;
-  pointer-events: none;
-}
-
 @media (max-width: 900px) {
   .hero { padding: 44px 0 38px; }
-  .hero-grid { grid-template-columns: 1fr; gap: 26px; }
-  .hero-deco { display: none; }
 }
 
 /* ── BUTTONS ────────────────────────────────────────────────────────── */
@@ -612,21 +588,9 @@ body::after {
   letter-spacing: -.02em;
   line-height: 1.05;
 }
-.section-more {
-  font-family: var(--f-mono);
-  font-size: .7rem;
-  letter-spacing: .14em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  padding-bottom: 4px;
-}
-.section-more::after { content: ' →'; }
-
 /* ── CARD GRIDS ─────────────────────────────────────────────────────── */
 .grid { display: grid; gap: 26px; }
-.grid-2 { grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); }
 .grid-3 { grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); }
-.grid-4 { grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); }
 
 /* ── POST CARD ──────────────────────────────────────────────────────── */
 .card {
@@ -657,20 +621,6 @@ body::after {
   box-shadow: var(--shadow-3);
 }
 .card:hover::before { transform: scaleX(1); }
-
-.card-media {
-  position: relative;
-  aspect-ratio: 16 / 9;
-  overflow: hidden;
-  background: linear-gradient(135deg, var(--panel-2), var(--panel-3));
-  border-bottom: 1px solid var(--rule);
-}
-.card-media img {
-  width: 100%; height: 100%;
-  object-fit: cover;
-  transition: transform .6s var(--ease);
-}
-.card:hover .card-media img { transform: scale(1.045); }
 
 .card-body { padding: 20px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
 
@@ -714,12 +664,6 @@ body::after {
   justify-content: space-between;
   gap: 10px;
 }
-
-/* Featured card spans two columns on wide screens */
-.card-featured { grid-column: span 2; }
-.card-featured .card-media { aspect-ratio: 21 / 9; }
-.card-featured .card-title { font-size: 1.95rem; }
-@media (max-width: 760px) { .card-featured { grid-column: span 1; } }
 
 /* ── TAGS & BADGES ──────────────────────────────────────────────────── */
 .tag {
@@ -1125,62 +1069,6 @@ a.tag:hover { border-color: var(--gold); color: var(--gold); background: var(--p
   width: 42%;
 }
 
-/* ── VIDEO CARD ─────────────────────────────────────────────────────── */
-.video-thumb { position: relative; }
-.video-duration {
-  position: absolute;
-  bottom: 8px; right: 8px;
-  padding: 2px 7px;
-  border-radius: 3px;
-  background: rgba(0,0,0,.85);
-  color: #fff;
-  font-family: var(--f-mono);
-  font-size: .68rem;
-  font-variant-numeric: tabular-nums;
-}
-.video-play {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  background: rgba(8,9,13,.35);
-  opacity: 0;
-  transition: opacity .3s var(--ease);
-}
-.card:hover .video-play { opacity: 1; }
-.video-play span {
-  width: 54px; height: 54px;
-  display: grid; place-items: center;
-  border-radius: 50%;
-  background: var(--crimson);
-  box-shadow: 0 0 30px var(--glow-crimson);
-  transform: scale(.85);
-  transition: transform .3s var(--ease);
-}
-.card:hover .video-play span { transform: scale(1); }
-.video-play svg { width: 20px; height: 20px; fill: #fff; stroke: none; margin-left: 3px; }
-
-/* ── REPO CARD ──────────────────────────────────────────────────────── */
-.repo-card { padding: 20px; gap: 12px; }
-.repo-name {
-  font-family: var(--f-mono);
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--paper);
-  word-break: break-word;
-}
-.card:hover .repo-name { color: var(--gold); }
-.repo-stats {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  font-family: var(--f-mono);
-  font-size: .68rem;
-  color: var(--paper-faint);
-}
-.repo-stats span { display: inline-flex; align-items: center; gap: 5px; }
-.lang-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--gold); flex: 0 0 auto; }
-
 /* ── GEAR CARD ──────────────────────────────────────────────────────── */
 .gear-media {
   aspect-ratio: 4 / 3;
@@ -1468,6 +1356,149 @@ a.tag:hover { border-color: var(--gold); color: var(--gold); background: var(--p
   .reveal:nth-child(6) { animation-delay: .29s; }
   .reveal:nth-child(n+7) { animation-delay: .34s; }
 }
+
+/* ── WORKBENCH SECTIONS ────────────────────────────────────────────────
+   Homepage + the five section index pages (Blog, Reviews, Projects,
+   Videos, Gear). Each section is drawn like the thing it actually is
+   instead of five copies of the same card — an extension of the existing
+   Arcade Broadsheet identity (phosphor terminal green, code-bg, the
+   arcade .score readout) rather than a competing visual language.
+   Everything else (masthead, footer, individual posts, support, about)
+   is untouched. ────────────────────────────────────────────────────── */
+
+/* Shared "logbook page" framing: a punch-hole rail + a numbered tab,
+   used to keep the homepage's five previews visually distinct. */
+.holes { position: absolute; left: 0; top: 6px; bottom: 6px; width: 9px; display: flex; flex-direction: column; justify-content: space-evenly; opacity: .55; }
+.holes i { width: 7px; height: 7px; border-radius: 50%; background: var(--ink); box-shadow: inset 0 1px 3px rgba(0,0,0,.4); }
+@media (max-width: 700px) { .holes { display: none; } }
+
+.tab-sec { position: relative; padding: 58px 0; border-bottom: 1px solid var(--rule); }
+.tab-sec .wrap { padding-left: 40px; position: relative; }
+.tab-sec:last-of-type { border-bottom: 0; }
+.tab-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 30px; flex-wrap: wrap; }
+.tab-num { font-family: var(--f-mono); font-size: .7rem; padding: 4px 10px; border-radius: var(--r-sm); background: var(--panel-2); border: 1px solid var(--rule-strong); color: var(--paper-dim); flex: 0 0 auto; }
+.tab-head h2 { font-family: var(--f-display); font-size: clamp(1.6rem, 3vw, 2.3rem); font-weight: 800; letter-spacing: -.02em; }
+.tab-lede { color: var(--paper-dim); font-size: .9rem; max-width: 440px; margin-top: 6px; }
+.tab-more { margin-left: auto; font-family: var(--f-mono); font-size: .7rem; letter-spacing: .1em; text-transform: uppercase; color: var(--gold); white-space: nowrap; align-self: center; }
+.tab-more::after { content: ' →'; }
+@media (max-width: 700px) { .tab-sec .wrap { padding-left: 0; } }
+
+/* Stamped CTA buttons — the redesigned pages' own button language,
+   distinct from .btn which the rest of the site keeps using. */
+.stamp-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--f-mono); font-size: .76rem; font-weight: 600; letter-spacing: .04em; text-transform: uppercase;
+  padding: 11px 18px; border: 1.5px dashed var(--rule-strong); border-radius: var(--r-sm);
+  color: var(--paper); background: transparent; cursor: pointer;
+  transition: transform .15s var(--ease), border-color .15s var(--ease), color .15s var(--ease), background .15s var(--ease);
+}
+.stamp-btn svg { width: 14px; height: 14px; stroke-width: 2; }
+.stamp-btn:hover { transform: rotate(-1deg); border-color: var(--gold); color: var(--gold); border-style: solid; }
+.stamp-btn.fill { background: var(--paper); color: var(--ink); border-style: solid; border-color: var(--paper); }
+.stamp-btn.fill:hover { background: var(--gold); border-color: var(--gold); color: var(--ink); }
+.stamp-btn.crimson { border-color: var(--crimson); color: var(--crimson); }
+.stamp-btn.crimson:hover { background: var(--crimson); color: #fff; }
+
+.entry-stamp {
+  display: inline-block; transform: rotate(-2.2deg); font-family: var(--f-mono); font-size: .68rem; letter-spacing: .1em;
+  padding: 5px 11px; border: 1.5px dashed var(--crimson); color: var(--crimson); border-radius: 3px; margin-bottom: 18px;
+}
+
+/* Homepage hero — a ruled-paper page instead of the two-column glow hero
+   the rest of the site uses. */
+.hero-log::before { display: none; }
+.hero-log-inner {
+  position: relative; padding-left: 26px; border-left: 2px solid var(--crimson);
+  background-image: repeating-linear-gradient(var(--ink) 0 34px, var(--rule) 34px 35px);
+  background-position-y: 4px;
+}
+@media (max-width: 700px) { .hero-log-inner { padding-left: 16px; } }
+
+/* Build-log strip — real, true facts about the site instead of a
+   marquee of category words. */
+.log-strip { background: var(--code-bg); border-bottom: 1px solid var(--rule); overflow: hidden; }
+.log-strip .wrap { padding: 11px 24px; display: flex; align-items: center; gap: 9px; font-family: var(--f-mono); font-size: .78rem; color: #c9d1d9; white-space: nowrap; overflow-x: auto; scrollbar-width: none; }
+.log-strip .wrap::-webkit-scrollbar { display: none; }
+.log-strip .prompt { color: var(--phosphor); }
+.log-strip .path { color: var(--gold); }
+.log-cursor { display: inline-block; width: 8px; height: 14px; background: var(--phosphor); animation: log-blink 1s step-end infinite; vertical-align: middle; }
+@keyframes log-blink { 50% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .log-cursor { animation: none; } }
+
+/* Blog — library index cards. */
+.idx-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px; }
+.idx-card { border: 1px solid var(--rule-strong); border-radius: var(--r-sm); background: var(--panel); padding: 20px 20px 22px; position: relative; transition: border-color .2s var(--ease), transform .2s var(--ease); }
+.idx-card:hover { border-color: var(--gold); transform: translateY(-2px); }
+.idx-card::before { content: ''; position: absolute; top: 14px; left: 14px; width: 7px; height: 7px; border-radius: 50%; background: var(--ink); box-shadow: inset 0 1px 2px rgba(0,0,0,.35); }
+.idx-meta { font-family: var(--f-mono); font-size: .62rem; letter-spacing: .07em; text-transform: uppercase; color: var(--paper-faint); margin: 0 0 12px 18px; display: flex; gap: 8px; flex-wrap: wrap; }
+.idx-card h3 { font-family: var(--f-display); font-size: 1.1rem; line-height: 1.28; font-weight: 700; margin: 0 0 12px 18px; padding-top: 8px; border-top: 1px dotted var(--rule-strong); }
+.idx-card h3 a { color: var(--paper); }
+.idx-card:hover h3 a { color: var(--gold); }
+.idx-card .score { margin-left: 18px; }
+
+/* Reviews — an instrument panel of dials, not a fabricated score list. */
+.gauge-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
+.gauge-card { border: 1px solid var(--rule-strong); border-radius: var(--r); background: var(--panel); padding: 18px 18px 16px; text-align: center; transition: border-color .2s var(--ease); }
+.gauge-card:hover { border-color: var(--gold); }
+.gauge-svg { width: 100%; max-width: 128px; margin: 0 auto; }
+.gauge-card h4 { font-family: var(--f-display); font-weight: 700; font-size: .98rem; margin: 6px 0 3px; line-height: 1.25; }
+.gauge-card h4 a { color: var(--paper); }
+.gauge-card:hover h4 a { color: var(--gold); }
+.gauge-cat { font-family: var(--f-mono); font-size: .62rem; color: var(--paper-faint); text-transform: uppercase; letter-spacing: .06em; }
+.gauge-readout { margin-top: 8px; font-family: var(--f-mono); font-weight: 700; font-size: 1.05rem; color: var(--gold); text-shadow: 0 0 10px var(--glow-gold); }
+.gauge-readout small { font-size: .62rem; opacity: .65; font-weight: 500; }
+.gauge-pending { display: inline-block; margin-top: 10px; font-family: var(--f-mono); font-size: .6rem; letter-spacing: .06em; padding: 3px 8px; border: 1px dashed var(--rule-strong); color: var(--paper-faint); border-radius: 3px; }
+
+/* Projects — a real terminal window instead of a repo card grid. */
+.term-window { background: var(--code-bg); border-radius: var(--r); border: 1px solid var(--rule-strong); overflow: hidden; box-shadow: var(--shadow-2); }
+.term-bar { display: flex; align-items: center; gap: 7px; padding: 11px 14px; border-bottom: 1px solid var(--rule); }
+.term-bar i { width: 10px; height: 10px; border-radius: 50%; background: #3a3f4b; }
+.term-bar i:nth-child(1) { background: var(--crimson); }
+.term-bar i:nth-child(2) { background: var(--gold); }
+.term-bar i:nth-child(3) { background: var(--phosphor); }
+.term-body { padding: 20px 22px 24px; font-family: var(--f-mono); font-size: .86rem; color: #c9d1d9; line-height: 1.85; overflow-x: auto; }
+.term-body .cmd { display: block; }
+.term-body .cmd a { color: inherit; }
+.term-body .p { color: var(--phosphor); }
+.term-body .path { color: var(--gold); }
+.term-body .out { color: #8b94a3; display: block; margin: 0 0 12px 20px; }
+.term-body .out a { color: #79b8ff; }
+
+/* Videos — a tape-deck readout instead of plain thumbnail cards. */
+.deck-panel { border: 1px solid var(--rule-strong); border-radius: var(--r); background: linear-gradient(160deg, var(--panel), var(--panel-2)); padding: 22px; display: flex; gap: 22px; align-items: center; flex-wrap: wrap; }
+.deck-counter { font-family: var(--f-mono); background: var(--code-bg); color: var(--phosphor); padding: 12px 16px; border-radius: var(--r-sm); font-size: 1.3rem; letter-spacing: .05em; border: 1px solid var(--rule-strong); text-shadow: 0 0 10px currentColor; }
+.deck-info { font-family: var(--f-mono); font-size: .78rem; color: var(--paper-dim); }
+.deck-info b { display: block; font-family: var(--f-display); font-size: 1.2rem; color: var(--paper); margin-bottom: 4px; font-weight: 800; }
+.reel-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 14px; margin-top: 18px; }
+.reel { border-radius: var(--r-sm); overflow: hidden; border: 1px solid var(--rule-strong); position: relative; background: var(--panel-2); transition: border-color .2s var(--ease); }
+.reel:hover { border-color: var(--gold); }
+.reel-thumb { position: relative; aspect-ratio: 16/9; background: linear-gradient(180deg, var(--panel-3), var(--panel-2)); overflow: hidden; }
+.reel-thumb::after { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(0deg, rgba(255,255,255,.05) 0 1px, transparent 1px 3px); pointer-events: none; }
+.reel-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.reel-duration { position: absolute; bottom: 7px; right: 7px; padding: 2px 6px; border-radius: 3px; background: rgba(0,0,0,.82); color: var(--phosphor); font-family: var(--f-mono); font-size: .64rem; }
+.reel-body { padding: 12px 13px 14px; }
+.reel-body a { color: var(--paper); font-family: var(--f-display); font-weight: 700; font-size: .92rem; line-height: 1.3; }
+.reel:hover .reel-body a { color: var(--gold); }
+.reel-meta { font-family: var(--f-mono); font-size: .64rem; color: var(--paper-faint); margin-top: 6px; }
+
+/* Gear — a pinned pegboard instead of a uniform grid. */
+.peg-board { display: flex; flex-wrap: wrap; gap: 14px; }
+.peg-tag { border: 1px dashed var(--rule-strong); border-radius: var(--r-sm); background: var(--panel); padding: 12px 14px; font-family: var(--f-mono); font-size: .72rem; min-width: 140px; transition: border-color .2s var(--ease); }
+.peg-tag:hover { border-color: var(--gold); border-style: solid; }
+.peg-tag b { display: block; font-family: var(--f-display); font-weight: 700; font-size: .9rem; color: var(--paper); margin-bottom: 4px; }
+.peg-tag span { color: var(--paper-faint); }
+.peg-tag:nth-child(3n+1) { transform: rotate(-1.3deg); }
+.peg-tag:nth-child(3n+2) { transform: rotate(1deg); }
+.peg-tag:nth-child(3n) { transform: rotate(-.4deg); }
+.peg-more { align-self: center; font-family: var(--f-mono); font-size: .76rem; color: var(--paper-faint); }
+
+/* Colophon — the homepage's closing note, in place of a generic CTA
+   blast. A colophon is a real print convention: the page explaining its
+   own typesetting. */
+.colophon-box { border: 1px solid var(--rule-strong); border-radius: var(--r-sm); padding: 34px; background: var(--panel); }
+.colophon-box p { color: var(--paper-dim); font-size: .92rem; max-width: 640px; line-height: 1.75; }
+.colophon-box p + p { margin-top: 12px; }
+.colo-links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
 
 /* ── PRINT ──────────────────────────────────────────────────────────── */
 @media print {
