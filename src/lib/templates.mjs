@@ -215,87 +215,89 @@ const sampleBadge = (dataset, secretName) =>
     ? `<span class="badge badge-sample" title="Set ${secretName} to replace this with live data">Sample</span>`
     : '';
 
-function postCard(post, { featured = false } = {}) {
+/* ── Workbench components ─────────────────────────────────────────────
+   Homepage + the five section index pages draw each pillar as the thing
+   it actually is (an index card, a dial, a terminal, a tape deck, a
+   pegboard) instead of five copies of one card component. Individual
+   posts, support and about keep the original card/verdict treatment. */
+
+function idxCard(post) {
   const badge = post.isReview
     ? '<span class="badge badge-review">Review</span>'
     : post.type === 'guide'
       ? '<span class="badge badge-guide">Guide</span>'
       : post.type === 'project'
         ? '<span class="badge badge-project">Project</span>'
-        : '';
+        : '<span class="badge badge-sample">Post</span>';
 
-  return `<article class="card reveal${featured ? ' card-featured' : ''}">
-  ${
-    post.cover
-      ? `<a class="card-media" href="${esc(post.url)}" tabindex="-1" aria-hidden="true"><img src="${esc(post.cover)}" alt="" loading="lazy" decoding="async"></a>`
-      : ''
-  }
-  <div class="card-body">
-    <div class="card-meta">
-      ${badge}
-      ${post.dateDisplay ? `<span>${esc(post.dateDisplay)}</span>` : ''}
-      <span class="sep">·</span>
-      <span>${post.readingTime} min</span>
-      ${post.rating != null ? `<span class="score"><span class="score-value">${post.rating}</span><span class="score-max">/10</span></span>` : ''}
-    </div>
-    <h3 class="card-title"><a href="${esc(post.url)}">${esc(post.title)}</a></h3>
-    <p class="card-desc">${esc(post.description)}</p>
-    ${
-      post.tags.length
-        ? `<div class="tag-list">${post.tags
-            .slice(0, 3)
-            .map((t) => `<a class="tag" href="/tags/${slugify(t)}/">${esc(t)}</a>`)
-            .join('')}</div>`
-        : ''
-    }
-  </div>
+  return `<article class="idx-card reveal">
+  <div class="idx-meta">${badge}${post.dateDisplay ? `<span>${esc(post.dateDisplay)}</span>` : ''}<span>${post.readingTime} min</span></div>
+  <h3><a href="${esc(post.url)}">${esc(post.title)}</a></h3>
+  ${post.rating ? `<span class="score"><span class="score-value">${post.rating}</span><span class="score-max">/10</span></span>` : ''}
 </article>`;
 }
 
-function videoCard(video) {
+/** A decorative dial — filled proportionally to a real rating, or parked
+ * straight up with a "verdict pending" stamp when there isn't one yet.
+ * `rating: 0` is this project's placeholder for "not scored yet" (every
+ * unfinished review scaffold ships with it), so treat it the same as no
+ * rating at all rather than rendering a fabricated zero score. */
+function gaugeCard(post) {
+  const hasRating = !!post.rating;
+  const angleDeg = hasRating ? (Math.max(0, Math.min(10, post.rating)) / 10) * 180 : 90;
+  const rad = (angleDeg * Math.PI) / 180;
+  const cx = 50, cy = 56, rTrack = 42, rNeedle = 34;
+  const tipX = (cx - rTrack * Math.cos(rad)).toFixed(1);
+  const tipY = (cy - rTrack * Math.sin(rad)).toFixed(1);
+  const needleX = (cx - rNeedle * Math.cos(rad)).toFixed(1);
+  const needleY = (cy - rNeedle * Math.sin(rad)).toFixed(1);
+  const arc = hasRating
+    ? `<path d="M8 56 A${rTrack} ${rTrack} 0 0 1 ${tipX} ${tipY}" fill="none" stroke="var(--gold)" stroke-width="7" stroke-linecap="round"/>`
+    : '';
+
+  return `<article class="gauge-card reveal">
+  <svg class="gauge-svg" viewBox="0 0 100 62" aria-hidden="true">
+    <path d="M8 56 A${rTrack} ${rTrack} 0 0 1 92 56" fill="none" stroke="var(--rule-strong)" stroke-width="7"/>
+    ${arc}
+    <line x1="${cx}" y1="${cy}" x2="${needleX}" y2="${needleY}" stroke="var(--paper)" stroke-width="2.5" stroke-linecap="round"/>
+    <circle cx="${cx}" cy="${cy}" r="4" fill="var(--paper)"/>
+  </svg>
+  <h4><a href="${esc(post.url)}">${esc(post.productName || post.title)}</a></h4>
+  <div class="gauge-cat">${post.dateDisplay ? esc(post.dateDisplay) : ''}</div>
+  ${hasRating ? `<div class="gauge-readout">${post.rating}<small>/10</small></div>` : `<div class="gauge-pending">verdict pending</div>`}
+</article>`;
+}
+
+/** One repo, rendered as a couple of faux terminal lines. */
+function termLine(repo) {
+  const stats = [repo.language, `★ ${repo.stars}`, `⑂ ${repo.forks}`].filter(Boolean).join('  ·  ');
+  return `<div class="cmd"><span class="p">$</span> cd ~/projects/<span class="path"><a href="${esc(repo.url)}" target="_blank" rel="noopener">${esc(slugify(repo.name))}</a></span> &amp;&amp; cat README.md</div>
+<span class="out">${esc(repo.description || 'No description yet.')}<br>${esc(stats)}</span>`;
+}
+
+/** One video, rendered as a "reel" in the tape-deck section. */
+function reel(video) {
   const href = video.url || `https://www.youtube.com/${config.youtubeHandle}`;
-  return `<article class="card reveal">
-  <a class="card-media video-thumb" href="${esc(href)}" target="_blank" rel="noopener">
+  return `<div class="reel">
+  <a class="reel-thumb" href="${esc(href)}" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">
     <img src="${esc(video.thumbnail || '/assets/video-placeholder.svg')}" alt="" loading="lazy" decoding="async"
          onerror="this.onerror=null;this.src='/assets/video-placeholder.svg'">
-    <span class="video-play"><span>${icons.play}</span></span>
-    ${video.duration ? `<span class="video-duration">${esc(video.duration)}</span>` : ''}
+    ${video.duration ? `<span class="reel-duration">${esc(video.duration)}</span>` : ''}
   </a>
-  <div class="card-body">
-    <div class="card-meta">
-      ${video.publishedAt ? `<span>${esc(formatDate(video.publishedAt))}</span>` : ''}
-      ${video.viewsDisplay ? `<span class="sep">·</span><span>${esc(video.viewsDisplay)} views</span>` : ''}
-    </div>
-    <h3 class="card-title"><a href="${esc(href)}" target="_blank" rel="noopener">${esc(video.title)}</a></h3>
-    ${video.description ? `<p class="card-desc">${esc(video.description.slice(0, 130))}${video.description.length > 130 ? '…' : ''}</p>` : ''}
+  <div class="reel-body">
+    <a href="${esc(href)}" target="_blank" rel="noopener">${esc(video.title)}</a>
+    <div class="reel-meta">${video.publishedAt ? esc(formatDate(video.publishedAt)) : ''}${video.viewsDisplay ? ` · ${esc(video.viewsDisplay)} views` : ''}</div>
   </div>
-</article>`;
+</div>`;
 }
 
-function repoCard(repo) {
-  return `<article class="card reveal">
-  <div class="card-body repo-card">
-    <div class="card-meta">
-      ${repo.isPinned ? '<span class="badge badge-project">Pinned</span>' : ''}
-      ${repo.license ? `<span>${esc(repo.license)}</span>` : ''}
-    </div>
-    <h3 class="repo-name"><a href="${esc(repo.url)}" target="_blank" rel="noopener">${esc(repo.name)}</a></h3>
-    <p class="card-desc">${esc(repo.description || 'No description yet.')}</p>
-    ${
-      repo.topics?.length
-        ? `<div class="tag-list">${repo.topics.map((t) => `<span class="tag">${esc(t)}</span>`).join('')}</div>`
-        : ''
-    }
-    <div class="card-foot">
-      <div class="repo-stats">
-        ${repo.language ? `<span><i class="lang-dot"></i>${esc(repo.language)}</span>` : ''}
-        <span>${icons.star}${repo.stars}</span>
-        <span>${icons.fork}${repo.forks}</span>
-      </div>
-      ${repo.homepage ? `<a class="tag" href="${esc(repo.homepage)}" target="_blank" rel="noopener">Live</a>` : ''}
-    </div>
-  </div>
-</article>`;
+/** One gear item, pinned to the pegboard with an inventory-tag number. */
+function pegTag(item, index) {
+  const tagNum = String(index + 1).padStart(3, '0');
+  const name = item.url
+    ? `<a href="${esc(item.url)}" target="_blank" rel="noopener sponsored">${esc(item.name)}</a>`
+    : esc(item.name);
+  return `<div class="peg-tag"><b>${name}</b><span>#${tagNum} · ${esc(item.category || 'gear')}</span></div>`;
 }
 
 function gearCard(item) {
@@ -333,10 +335,7 @@ function emptyState(title, body) {
 
 /* ── Pages ─────────────────────────────────────────────────────────── */
 
-export function homePage({ posts, videos, repos, gear, patreon, youtube, github }) {
-  const featured = posts.find((p) => p.featured) || posts[0];
-  const rest = posts.filter((p) => p !== featured).slice(0, 4);
-
+export function homePage({ posts, videos, repos, gear, patreon, youtube, github, reviews = [] }) {
   const stats = [
     youtube?.channel?.subscribersDisplay && {
       label: 'Subscribers', value: youtube.channel.subscribersDisplay, live: 'youtube.subscribers',
@@ -346,77 +345,109 @@ export function homePage({ posts, videos, repos, gear, patreon, youtube, github 
     patreon?.patronCount ? { label: 'Patrons', value: patreon.patronCount, live: 'patreon.patrons' } : null,
   ].filter(Boolean);
 
+  const blogPreview = posts.slice(0, 4);
+  const reviewPreview = reviews.slice(0, 4);
+  const projectPreview = repos.slice(0, 4);
+  const videoPreview = videos.slice(0, 4);
+  const gearPreview = gear.filter((g) => g.featured).slice(0, 6);
+
   const body = `
-<section class="hero">
-  <div class="wrap hero-grid">
-    <div>
-      <div class="eyebrow">${esc(config.youtubeHandle)} — Est. ${new Date().getFullYear()}</div>
+<section class="hero hero-log">
+  <div class="wrap">
+    <div class="hero-log-inner">
+      <span class="entry-stamp">ENTRY №01 — HOMEPAGE</span>
       <h1 class="hero-title">Built, broken,<br><em>written down</em></h1>
       <p class="hero-lede">${esc(config.siteDescription)} Everything here is <strong>tested first, written second</strong> — reviews with the numbers attached, projects with the source, and guides I actually follow myself.</p>
       <div class="hero-cta">
-        <a class="btn btn-primary" href="/blog/">Read the blog ${icons.arrowRight}</a>
-        <a class="btn" href="https://www.youtube.com/${esc(config.youtubeHandle)}" target="_blank" rel="noopener">${brandIcons.youtube} YouTube</a>
-        <a class="btn" href="/support/">${icons.heart} Support</a>
+        <a class="stamp-btn fill" href="/blog/">Read the blog</a>
+        <a class="stamp-btn" href="https://www.youtube.com/${esc(config.youtubeHandle)}" target="_blank" rel="noopener">${brandIcons.youtube} YouTube</a>
+        <a class="stamp-btn" href="/support/">${icons.heart} Support</a>
       </div>
     </div>
-    <div class="hero-deco" aria-hidden="true">${esc(initials(config.siteName))}</div>
   </div>
 </section>
 
-<section class="section">
+<div class="log-strip"><div class="wrap">
+  <span class="prompt">${esc(config.githubUsername || 'admin')}@${esc(slugify(config.siteName))}</span><span>:</span><span class="path">~</span><span>$</span>
+  <span>status — ${posts.length} posts · ${gear.length} gear items tracked · ${repos.length} repos documented · rebuilt from Markdown, no CMS<span class="log-cursor"></span></span>
+</div></div>
+
+<section class="tab-sec" id="blog">
+  <div class="holes"><i></i><i></i><i></i><i></i></div>
   <div class="wrap">
-    <div class="section-head">
-      <h2 class="section-title">Latest writing</h2>
-      <a class="section-more" href="/blog/">All posts</a>
+    <div class="tab-head">
+      <span class="tab-num">§ 01</span>
+      <div><h2>Blog</h2><p class="tab-lede">The writing, filed like a library catalogue.</p></div>
+      <a class="tab-more" href="/blog/">All posts</a>
     </div>
     ${
-      posts.length
-        ? `<div class="grid grid-2">
-      ${featured ? postCard(featured, { featured: true }) : ''}
-      ${rest.map((p) => postCard(p)).join('\n      ')}
-    </div>`
+      blogPreview.length
+        ? `<div class="idx-grid">${blogPreview.map(idxCard).join('\n      ')}</div>`
         : emptyState('No posts yet', 'Add a Markdown file to <code>content/blog/</code> and it appears here on the next build.')
     }
   </div>
 </section>
 
-<section class="section">
+<section class="tab-sec" id="reviews">
+  <div class="holes"><i></i><i></i><i></i><i></i></div>
   <div class="wrap">
-    <div class="section-head">
-      <h2 class="section-title">From the channel ${sampleBadge(youtube, 'YOUTUBE_CHANNEL_ID')}</h2>
-      <a class="section-more" href="/videos/">All videos</a>
+    <div class="tab-head">
+      <span class="tab-num">§ 02</span>
+      <div><h2>Reviews</h2><p class="tab-lede">Dials, not scores — until something's actually been used, it doesn't get a number.</p></div>
+      <a class="tab-more" href="/reviews/">All reviews</a>
     </div>
     ${
-      videos.length
-        ? `<div class="grid grid-3">${videos.slice(0, 3).map(videoCard).join('\n      ')}</div>`
-        : emptyState('No videos loaded', 'Set <code>YOUTUBE_CHANNEL_ID</code> in your repository secrets to pull the channel feed.')
+      reviewPreview.length
+        ? `<div class="gauge-grid">${reviewPreview.map(gaugeCard).join('\n      ')}</div>`
+        : emptyState('Nothing tested yet', 'Reviews show up here once a post in <code>content/blog/</code> has <code>type: review</code> and <code>draft: false</code>.')
     }
   </div>
 </section>
 
-<section class="section">
+<section class="tab-sec" id="projects">
+  <div class="holes"><i></i><i></i><i></i><i></i></div>
   <div class="wrap">
-    <div class="section-head">
-      <h2 class="section-title">Things I've built ${sampleBadge(github, 'GH_USERNAME')}</h2>
-      <a class="section-more" href="/projects/">All projects</a>
+    <div class="tab-head">
+      <span class="tab-num">§ 03</span>
+      <div><h2>Projects ${sampleBadge(github, 'GH_USERNAME')}</h2><p class="tab-lede">Read straight from the source, not a summary of it.</p></div>
+      <a class="tab-more" href="/projects/">All projects</a>
     </div>
     ${
-      repos.length
-        ? `<div class="grid grid-3">${repos.slice(0, 3).map(repoCard).join('\n      ')}</div>`
+      projectPreview.length
+        ? `<div class="term-window"><div class="term-bar"><i></i><i></i><i></i></div><div class="term-body">${projectPreview.map(termLine).join('\n')}</div></div>`
         : emptyState('No repositories loaded', 'Set <code>GH_USERNAME</code> to list your public repositories here.')
     }
   </div>
 </section>
 
-${
-  gear.length
-    ? `<section class="section">
+<section class="tab-sec" id="videos">
+  <div class="holes"><i></i><i></i><i></i><i></i></div>
   <div class="wrap">
-    <div class="section-head">
-      <h2 class="section-title">Gear I actually use</h2>
-      <a class="section-more" href="/gear/">Full list</a>
+    <div class="tab-head">
+      <span class="tab-num">§ 04</span>
+      <div><h2>Videos ${sampleBadge(youtube, 'YOUTUBE_CHANNEL_ID')}</h2><p class="tab-lede">The channel is the front door — watch first, then read the numbers.</p></div>
+      <a class="tab-more" href="/videos/">All videos</a>
     </div>
-    <div class="grid grid-4">${gear.filter((g) => g.featured).slice(0, 4).map(gearCard).join('\n      ')}</div>
+    ${
+      videoPreview.length
+        ? `<div class="deck-panel"><div class="deck-counter">${String(videos.length).padStart(3, '0')}</div><div class="deck-info">CH. ${esc(config.youtubeHandle)}<b>${youtube?.channel?.subscribersDisplay ? esc(youtube.channel.subscribersDisplay) + ' subscribers' : 'Uploads from the channel'}</b>newest first, synced from the channel feed</div></div>
+    <div class="reel-grid">${videoPreview.map(reel).join('\n      ')}</div>`
+        : emptyState('No videos loaded', 'Set <code>YOUTUBE_CHANNEL_ID</code> in your repository secrets to pull the channel feed.')
+    }
+  </div>
+</section>
+
+${
+  gearPreview.length
+    ? `<section class="tab-sec" id="gear" style="border-bottom:none">
+  <div class="holes"><i></i><i></i><i></i><i></i></div>
+  <div class="wrap">
+    <div class="tab-head">
+      <span class="tab-num">§ 05</span>
+      <div><h2>Gear</h2><p class="tab-lede">Pinned to the board, not filed in a spreadsheet.</p></div>
+      <a class="tab-more" href="/gear/">Full list</a>
+    </div>
+    <div class="peg-board">${gearPreview.map((g) => pegTag(g, gear.indexOf(g))).join('\n      ')}${gear.length > gearPreview.length ? `<div class="peg-more">+${gear.length - gearPreview.length} more on /gear/ →</div>` : ''}</div>
   </div>
 </section>`
     : ''
@@ -424,17 +455,13 @@ ${
 
 <section class="section">
   <div class="wrap">
-    <div class="section-head"><h2 class="section-title">Keep this going</h2></div>
-    <div class="support-split">
-      <div class="platform-card">
-        <h3>${brandIcons.patreon} Patreon</h3>
-        <p>Monthly support, early access to posts and videos, and a say in what gets covered next.</p>
-        <a class="btn btn-crimson" href="${esc(config.patreonUrl)}" target="_blank" rel="noopener">Become a patron ${icons.external}</a>
-      </div>
-      <div class="platform-card">
-        <h3>${icons.coffee} Buy Me a Coffee</h3>
-        <p>One-off support, no commitment. Genuinely helps cover the hardware that gets torn apart here.</p>
-        <a class="btn btn-primary" href="${esc(config.bmcUrl)}" target="_blank" rel="noopener">Buy a coffee ${icons.external}</a>
+    <div class="colophon-box">
+      <span class="tab-num">COLOPHON</span>
+      <p>Set in Playfair Display, DM Sans and JetBrains Mono. No CMS, no admin panel — this homepage is a Markdown folder and a build script, same as every page it links to.</p>
+      <p>If it's worth reading, it's worth supporting.</p>
+      <div class="colo-links">
+        <a class="stamp-btn crimson" href="${esc(config.patreonUrl)}" target="_blank" rel="noopener">${brandIcons.patreon} Become a patron</a>
+        <a class="stamp-btn" href="${esc(config.bmcUrl)}" target="_blank" rel="noopener">${icons.coffee} Buy a coffee</a>
       </div>
     </div>
   </div>
@@ -459,7 +486,8 @@ ${
   );
 }
 
-export function blogIndexPage(posts, { title = 'Blog', description, url = '/blog/', intro, current } = {}) {
+export function blogIndexPage(posts, { title = 'Blog', description, url = '/blog/', intro, current, variant } = {}) {
+  const isGauges = variant === 'gauges';
   const body = `
 <section class="hero">
   <div class="wrap">
@@ -473,8 +501,12 @@ export function blogIndexPage(posts, { title = 'Blog', description, url = '/blog
   <div class="wrap">
     ${
       posts.length
-        ? `<div class="grid grid-2">${posts.map((p) => postCard(p)).join('\n      ')}</div>`
-        : emptyState('Nothing here yet', 'New posts show up automatically once they land in <code>content/blog/</code>.')
+        ? isGauges
+          ? `<div class="gauge-grid">${posts.map(gaugeCard).join('\n      ')}</div>`
+          : `<div class="idx-grid">${posts.map(idxCard).join('\n      ')}</div>`
+        : isGauges
+          ? emptyState('Nothing tested yet', 'Reviews show up here once a post has <code>type: review</code> and <code>draft: false</code>.')
+          : emptyState('Nothing here yet', 'New posts show up automatically once they land in <code>content/blog/</code>.')
     }
   </div>
 </section>`;
@@ -683,8 +715,8 @@ export function videosPage(youtube) {
       ch.subscribersDisplay ? ` <strong>${esc(ch.subscribersDisplay)} subscribers</strong>.` : ''
     }</p>
     <div class="hero-cta">
-      <a class="btn btn-crimson" href="${esc(ch.url || `https://www.youtube.com/${config.youtubeHandle}`)}" target="_blank" rel="noopener">
-        ${brandIcons.youtube} Subscribe ${icons.external}
+      <a class="stamp-btn crimson" href="${esc(ch.url || `https://www.youtube.com/${config.youtubeHandle}`)}" target="_blank" rel="noopener">
+        ${brandIcons.youtube} Subscribe
       </a>
     </div>
   </div>
@@ -694,7 +726,8 @@ export function videosPage(youtube) {
   <div class="wrap">
     ${
       videos.length
-        ? `<div class="grid grid-3">${videos.map(videoCard).join('\n      ')}</div>`
+        ? `<div class="deck-panel"><div class="deck-counter">${String(videos.length).padStart(3, '0')}</div><div class="deck-info">CH. ${esc(config.youtubeHandle)}<b>${ch.subscribersDisplay ? esc(ch.subscribersDisplay) + ' subscribers' : 'Uploads from the channel'}</b>newest first, synced from the channel feed</div></div>
+    <div class="reel-grid">${videos.map(reel).join('\n      ')}</div>`
         : emptyState(
             'No videos loaded yet',
             'Add <code>YOUTUBE_CHANNEL_ID</code> to your repository secrets (and optionally <code>YOUTUBE_API_KEY</code> for view counts and durations), then re-run the build.'
@@ -726,8 +759,8 @@ export function projectsPage(github) {
       github.totals?.stars ? `<strong>${github.totals.stars} stars</strong> across everything.` : ''
     }</p>
     <div class="hero-cta">
-      <a class="btn" href="https://github.com/${esc(config.githubUsername)}" target="_blank" rel="noopener">
-        ${brandIcons.github} View profile ${icons.external}
+      <a class="stamp-btn" href="https://github.com/${esc(config.githubUsername)}" target="_blank" rel="noopener">
+        ${brandIcons.github} View profile
       </a>
     </div>
   </div>
@@ -737,7 +770,7 @@ export function projectsPage(github) {
   <div class="wrap">
     ${
       repos.length
-        ? `<div class="grid grid-3">${repos.map(repoCard).join('\n      ')}</div>`
+        ? `<div class="term-window"><div class="term-bar"><i></i><i></i><i></i></div><div class="term-body">${repos.map(termLine).join('\n')}</div></div>`
         : emptyState('No repositories loaded', 'Set <code>GH_USERNAME</code> and re-run the build.')
     }
     ${
@@ -775,9 +808,9 @@ export function gearPage(gear) {
             .map(
               (cat) => `<div style="margin-top:40px">
       <div class="section-head"><h2 class="section-title">${esc(cat)}</h2></div>
-      <div class="grid grid-3">${gear
+      <div class="peg-board">${gear
         .filter((g) => (g.category || 'Other') === cat)
-        .map(gearCard)
+        .map((g) => pegTag(g, gear.indexOf(g)))
         .join('\n      ')}</div>
     </div>`
             )
@@ -912,4 +945,4 @@ export function notFoundPage() {
   );
 }
 
-export { postCard, videoCard, repoCard, gearCard };
+export { gearCard };
