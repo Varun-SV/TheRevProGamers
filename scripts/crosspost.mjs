@@ -34,6 +34,7 @@ import path from 'node:path';
 import { execSync } from 'node:child_process';
 import { config, enabled, ROOT } from '../src/lib/config.mjs';
 import { loadPosts } from '../src/lib/content.mjs';
+import { blocksToMarkdown } from '../src/lib/blocks.mjs';
 import { postJson } from '../src/lib/http.mjs';
 
 const OUT_DIR = path.join(ROOT, '.crosspost');
@@ -89,7 +90,7 @@ const permalink = (post) => `${config.siteUrl}${post.url}`;
 
 /** Strip Markdown to readable plain text, for platforms without formatting. */
 function toPlainText(md, limit = 900) {
-  const text = md
+  const text = blocksToMarkdown(md)
     .replace(/<!--[\s\S]*?-->/g, '')
     .replace(/```[\s\S]*?```/g, '')
     .replace(/!\[[^\]]*\]\([^)]*\)/g, '')
@@ -104,8 +105,12 @@ function toPlainText(md, limit = 900) {
   return `${cut.slice(0, cut.lastIndexOf(' '))}…`;
 }
 
-/** Remove the editor-note comments before anything is published anywhere. */
-const cleanMarkdown = (md) => md.replace(/<!--[\s\S]*?-->/g, '').trim();
+/**
+ * Remove the editor-note comments before anything is published anywhere, and
+ * turn ```stats / ```chart / ```note blocks into plain lists and tables —
+ * other platforms would otherwise show them as raw code.
+ */
+const cleanMarkdown = (md) => blocksToMarkdown(md.replace(/<!--[\s\S]*?-->/g, '')).trim();
 
 function renderPatreon(post) {
   const body = cleanMarkdown(post.markdown);

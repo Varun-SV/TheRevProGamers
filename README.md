@@ -83,6 +83,53 @@ specs:
 Reviews also emit `schema.org/Review` structured data, so the score can appear
 in search results.
 
+### Stats, charts and notes
+
+Three fenced blocks turn plain text into themed components at build time. No
+charting library ships to the browser, every chart carries its numbers as a
+real table ("Show the numbers"), and cross-posts get them as ordinary Markdown
+lists and tables instead of raw code.
+
+````markdown
+```stats
+0.00%  | Stale sources packed | Baselines: 100% | good
+99.27% | Clean contexts at 4k | Baselines: 89.59%
+```
+````
+
+One readout per line: `value | label | note | tone`. Note and tone are
+optional; tone is `good`, `bad`, `warn` or `info`.
+
+````markdown
+```chart
+type: line                 # bar (default) or line
+title: Recall by budget
+note: n = 1,921 · higher is better
+unit: %                    # sets the max to 100 unless you give max:
+series: EviCortex, Baseline
+512: 71.73, 100
+4,000: 99.27, 100
+caption: Optional sentence under the chart.
+```
+````
+
+Every other line is `label: value, value, …`, one value per series (up to
+four). Use plain numbers without thousands separators, and `-` for a gap.
+Series 1 is drawn in the accent colour, so put the post's subject first. Line
+charts label series 1's points; set `labels: all` or `labels: none` to change
+that.
+
+````markdown
+```note
+title: Small budgets are the open problem
+tone: warn
+Body is **Markdown**.
+```
+````
+
+A malformed block never breaks the build: it prints a warning and shows up on
+the page as an ordinary code block so you can spot it.
+
 ### Gear and affiliate links
 
 Edit `content/data/gear.json` — it is the single source for `/gear/` and for
