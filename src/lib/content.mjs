@@ -8,6 +8,7 @@ import { marked } from 'marked';
 import hljs from 'highlight.js';
 import { parseFrontmatter } from './frontmatter.mjs';
 import { config, ROOT } from './config.mjs';
+import { renderBlock } from './blocks.mjs';
 
 const BLOG_DIR = path.join(ROOT, 'content/blog');
 const PAGES_DIR = path.join(ROOT, 'content/pages');
@@ -83,6 +84,13 @@ function makeRenderer(headings) {
   // Highlight at build time so the browser ships no highlighter at all.
   renderer.code = function ({ text, lang }) {
     const language = (lang || '').split(/\s+/)[0].toLowerCase();
+
+    // ```stats / ```chart / ```note — see src/lib/blocks.mjs
+    const block = renderBlock(language, text, {
+      markdown: (md) => marked.parse(md, { gfm: true, renderer: makeRenderer([]) }),
+    });
+    if (block) return block;
+
     let highlighted;
     let cls = 'hljs';
 
